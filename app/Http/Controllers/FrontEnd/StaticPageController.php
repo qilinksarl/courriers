@@ -9,6 +9,11 @@ class StaticPageController extends Controller
 {
     public function __invoke(String $slug)
     {
-        return view('front-end.static-page');
+        return match($slug) {
+            'envoyer' => view('front-end.send-page'),
+            'faq' => view('front-end.faq-page'),
+            'prix' => view('front-end.price-page'),
+            default => view('front-end.static-page'),
+        };
     }
 }

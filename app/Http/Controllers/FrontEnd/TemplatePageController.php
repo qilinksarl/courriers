@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use Illuminate\Contracts\View\View;
 
 class TemplatePageController extends Controller
 {
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
-
-    }
-
-    public function show()
-    {
-
+        return view('front-end.templates.index', [
+            'templateCategories' => Category::orderBy('name')->get(),
+        ]);
     }
 }
