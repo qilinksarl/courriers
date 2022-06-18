@@ -1,10 +1,1058 @@
+/*!
+ * FilePond 4.30.4
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://pqina.nl/filepond/ for details.
+ */
+
+/* eslint-disable */
+.filepond--assistant {
+    position: absolute;
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+/* Hard to override styles */
+.filepond--browser.filepond--browser {
+    /* is positioned absolute so it is focusable for form validation errors */
+    position: absolute;
+    margin: 0;
+    padding: 0;
+
+    /* is positioned ~behind drop label */
+    left: 1em;
+    top: 1.75em;
+    width: calc(100% - 2em);
+
+    /* hide visually */
+    opacity: 0;
+    font-size: 0; /* removes text cursor in Internet Explorer 11 */
+}
+.filepond--data {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    visibility: hidden;
+    pointer-events: none;
+    contain: strict;
+}
+.filepond--drip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 0.1;
+
+    /* can't interact with this element */
+    pointer-events: none;
+
+    /* inherit border radius from parent (needed for drip-blob cut of) */
+    border-radius: 0.5em;
+
+    /* this seems to prevent Chrome from redrawing this layer constantly */
+    background: rgba(0, 0, 0, 0.01);
+}
+.filepond--drip-blob {
+    position: absolute;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    top: 0;
+    left: 0;
+    width: 8em;
+    height: 8em;
+    margin-left: -4em;
+    margin-top: -4em;
+    background: #292625;
+    border-radius: 50%;
+
+    /* will be animated */
+    will-change: transform, opacity;
+}
+.filepond--drop-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0;
+    color: #4f4f4f;
+
+    /* center contents */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* fixes IE11 centering problems (is overruled by label min-height) */
+    height: 0px;
+
+    /* dont allow selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* will be animated */
+    will-change: transform, opacity;
+}
+/* Hard to override styles on purpose */
+.filepond--drop-label.filepond--drop-label label {
+    display: block;
+    margin: 0;
+    padding: 0.5em; /* use padding instead of margin so click area is not impacted */
+}
+.filepond--drop-label label {
+    cursor: default;
+    font-size: 0.875em;
+    font-weight: normal;
+    text-align: center;
+    line-height: 1.5;
+}
+.filepond--label-action {
+    text-decoration: underline;
+    -webkit-text-decoration-skip: ink;
+    text-decoration-skip-ink: auto;
+    -webkit-text-decoration-color: #a7a4a4;
+    text-decoration-color: #a7a4a4;
+    cursor: pointer;
+}
+.filepond--root[data-disabled] .filepond--drop-label label {
+    opacity: 0.5;
+}
+/* Hard to override styles */
+.filepond--file-action-button.filepond--file-action-button {
+    font-size: 1em;
+    width: 1.625em;
+    height: 1.625em;
+
+    font-family: inherit;
+    line-height: inherit;
+
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+
+    will-change: transform, opacity;
+
+    /* hidden label */
+}
+.filepond--file-action-button.filepond--file-action-button span {
+    position: absolute;
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.filepond--file-action-button.filepond--file-action-button {
+    /* scale SVG to fill button */
+}
+.filepond--file-action-button.filepond--file-action-button svg {
+    width: 100%;
+    height: 100%;
+}
+.filepond--file-action-button.filepond--file-action-button {
+    /* bigger touch area */
+}
+.filepond--file-action-button.filepond--file-action-button::after {
+    position: absolute;
+    left: -0.75em;
+    right: -0.75em;
+    top: -0.75em;
+    bottom: -0.75em;
+    content: '';
+}
+/* Soft styles */
+.filepond--file-action-button {
+    /* use default arrow cursor */
+    cursor: auto;
+
+    /* reset default button styles */
+    color: #fff;
+
+    /* set default look n feel */
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: none;
+
+    /* we animate box shadow on focus */
+    /* it's only slightly slower than animating */
+    /* a pseudo-element with transforms and renders */
+    /* a lot better on chrome */
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transition: box-shadow 0.25s ease-in;
+}
+.filepond--file-action-button:hover,
+.filepond--file-action-button:focus {
+    box-shadow: 0 0 0 0.125em rgba(255, 255, 255, 0.9);
+}
+.filepond--file-action-button[disabled] {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.filepond--file-action-button[hidden] {
+    display: none;
+}
+/* edit button */
+.filepond--action-edit-item.filepond--action-edit-item {
+    width: 2em;
+    height: 2em;
+    padding: 0.1875em;
+}
+.filepond--action-edit-item.filepond--action-edit-item[data-align*='center'] {
+    margin-left: -0.1875em;
+}
+.filepond--action-edit-item.filepond--action-edit-item[data-align*='bottom'] {
+    margin-bottom: -0.1875em;
+}
+.filepond--action-edit-item-alt {
+    border: none;
+    line-height: inherit;
+    background: transparent;
+    font-family: inherit;
+    color: inherit;
+    outline: none;
+    padding: 0;
+    margin: 0 0 0 0.25em;
+    pointer-events: all;
+    position: absolute;
+}
+.filepond--action-edit-item-alt svg {
+    width: 1.3125em;
+    height: 1.3125em;
+}
+.filepond--action-edit-item-alt span {
+    font-size: 0;
+    opacity: 0;
+}
+.filepond--file-info {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+    margin: 0 0.5em 0 0;
+    min-width: 0;
+
+    /* will be animated */
+    will-change: transform, opacity;
+
+    /* can't do anything with this info */
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* no margins on children */
+}
+.filepond--file-info * {
+    margin: 0;
+}
+.filepond--file-info {
+    /* we don't want to have these overrules so these selectors are a bit more specific */
+}
+.filepond--file-info .filepond--file-info-main {
+    font-size: 0.75em;
+    line-height: 1.2;
+
+    /* we want ellipsis if this bar gets too wide */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+.filepond--file-info .filepond--file-info-sub {
+    font-size: 0.625em;
+    opacity: 0.5;
+    transition: opacity 0.25s ease-in-out;
+    white-space: nowrap;
+}
+.filepond--file-info .filepond--file-info-sub:empty {
+    display: none;
+}
+.filepond--file-status {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    margin: 0;
+    min-width: 2.25em;
+    text-align: right;
+
+    /* will be animated */
+    will-change: transform, opacity;
+
+    /* can't do anything with this info */
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* no margins on children */
+}
+.filepond--file-status * {
+    margin: 0;
+    white-space: nowrap;
+}
+.filepond--file-status {
+    /* font sizes */
+}
+.filepond--file-status .filepond--file-status-main {
+    font-size: 0.75em;
+    line-height: 1.2;
+}
+.filepond--file-status .filepond--file-status-sub {
+    font-size: 0.625em;
+    opacity: 0.5;
+    transition: opacity 0.25s ease-in-out;
+}
+/* Hard to override styles */
+.filepond--file-wrapper.filepond--file-wrapper {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    height: 100%;
+
+    /* hide legend for visual users */
+}
+.filepond--file-wrapper.filepond--file-wrapper > legend {
+    position: absolute;
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.filepond--file {
+    position: static;
+    display: flex;
+    height: 100%;
+    align-items: flex-start;
+
+    padding: 0.5625em 0.5625em;
+
+    color: #fff;
+    border-radius: 0.5em;
+
+    /* control positions */
+}
+.filepond--file .filepond--file-status {
+    margin-left: auto;
+    margin-right: 2.25em;
+}
+.filepond--file .filepond--processing-complete-indicator {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 3;
+}
+.filepond--file .filepond--processing-complete-indicator,
+.filepond--file .filepond--progress-indicator,
+.filepond--file .filepond--file-action-button {
+    position: absolute;
+}
+.filepond--file {
+    /* .filepond--file-action-button */
+}
+.filepond--file [data-align*='left'] {
+    left: 0.5625em;
+}
+.filepond--file [data-align*='right'] {
+    right: 0.5625em;
+}
+.filepond--file [data-align*='center'] {
+    left: calc(50% - 0.8125em); /* .8125 is half of button width */
+}
+.filepond--file [data-align*='bottom'] {
+    bottom: 1.125em;
+}
+.filepond--file [data-align='center'] {
+    top: calc(50% - 0.8125em);
+}
+.filepond--file .filepond--progress-indicator {
+    margin-top: 0.1875em;
+}
+.filepond--file .filepond--progress-indicator[data-align*='right'] {
+    margin-right: 0.1875em;
+}
+.filepond--file .filepond--progress-indicator[data-align*='left'] {
+    margin-left: 0.1875em;
+}
+/* make sure text does not overlap */
+[data-filepond-item-state='cancelled'] .filepond--file-info,
+[data-filepond-item-state*='invalid'] .filepond--file-info,
+[data-filepond-item-state*='error'] .filepond--file-info {
+    margin-right: 2.25em;
+}
+[data-filepond-item-state~='processing'] .filepond--file-status-sub {
+    opacity: 0;
+}
+[data-filepond-item-state~='processing']
+    .filepond--action-abort-item-processing
+    ~ .filepond--file-status
+    .filepond--file-status-sub {
+    opacity: 0.5;
+}
+[data-filepond-item-state='processing-error'] .filepond--file-status-sub {
+    opacity: 0;
+}
+[data-filepond-item-state='processing-error']
+    .filepond--action-retry-item-processing
+    ~ .filepond--file-status
+    .filepond--file-status-sub {
+    opacity: 0.5;
+}
+[data-filepond-item-state='processing-complete'] {
+    /* busy state */
+}
+[data-filepond-item-state='processing-complete'] .filepond--action-revert-item-processing svg {
+    -webkit-animation: fall 0.5s 0.125s linear both;
+    animation: fall 0.5s 0.125s linear both;
+}
+[data-filepond-item-state='processing-complete'] {
+    /* hide details by default, only show when can revert */
+}
+[data-filepond-item-state='processing-complete'] .filepond--file-status-sub {
+    opacity: 0.5;
+}
+[data-filepond-item-state='processing-complete']
+    .filepond--processing-complete-indicator:not([style*='hidden'])
+    ~ .filepond--file-status
+    .filepond--file-status-sub {
+    opacity: 0;
+}
+[data-filepond-item-state='processing-complete'] .filepond--file-info-sub {
+    opacity: 0;
+}
+[data-filepond-item-state='processing-complete']
+    .filepond--action-revert-item-processing
+    ~ .filepond--file-info
+    .filepond--file-info-sub {
+    opacity: 0.5;
+}
+/* file state can be invalid or error, both are visually similar but */
+/* having them as separate states might be useful */
+[data-filepond-item-state*='invalid'] .filepond--panel,
+[data-filepond-item-state*='invalid'] .filepond--file-wrapper,
+[data-filepond-item-state*='error'] .filepond--panel,
+[data-filepond-item-state*='error'] .filepond--file-wrapper {
+    -webkit-animation: shake 0.65s linear both;
+    animation: shake 0.65s linear both;
+}
+/* spins progress indicator when file is marked as busy */
+[data-filepond-item-state*='busy'] .filepond--progress-indicator svg {
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}
+/**
+ * States
+ */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotateZ(0deg);
+        transform: rotateZ(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotateZ(0deg);
+        transform: rotateZ(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+}
+@-webkit-keyframes shake {
+    10%,
+    90% {
+        -webkit-transform: translateX(-0.0625em);
+        transform: translateX(-0.0625em);
+    }
+
+    20%,
+    80% {
+        -webkit-transform: translateX(0.125em);
+        transform: translateX(0.125em);
+    }
+
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-0.25em);
+        transform: translateX(-0.25em);
+    }
+
+    40%,
+    60% {
+        -webkit-transform: translateX(0.25em);
+        transform: translateX(0.25em);
+    }
+}
+@keyframes shake {
+    10%,
+    90% {
+        -webkit-transform: translateX(-0.0625em);
+        transform: translateX(-0.0625em);
+    }
+
+    20%,
+    80% {
+        -webkit-transform: translateX(0.125em);
+        transform: translateX(0.125em);
+    }
+
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-0.25em);
+        transform: translateX(-0.25em);
+    }
+
+    40%,
+    60% {
+        -webkit-transform: translateX(0.25em);
+        transform: translateX(0.25em);
+    }
+}
+@-webkit-keyframes fall {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+
+    70% {
+        opacity: 1;
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in-out;
+        animation-timing-function: ease-in-out;
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+}
+@keyframes fall {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+
+    70% {
+        opacity: 1;
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in-out;
+        animation-timing-function: ease-in-out;
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+}
+/* ignore all other interaction elements while dragging a file */
+.filepond--hopper[data-hopper-state='drag-over'] > * {
+    pointer-events: none;
+}
+/* capture all hit tests using a hidden layer, this speeds up the event flow */
+.filepond--hopper[data-hopper-state='drag-over']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
+.filepond--progress-indicator {
+    z-index: 103;
+}
+.filepond--file-action-button {
+    z-index: 102;
+}
+.filepond--file-status {
+    z-index: 101;
+}
+.filepond--file-info {
+    z-index: 100;
+}
+.filepond--item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+
+    padding: 0;
+    margin: 0.25em;
+
+    will-change: transform, opacity;
+
+    /* item children order */
+}
+.filepond--item > .filepond--panel {
+    z-index: -1;
+}
+/* has a slight shadow */
+.filepond--item > .filepond--panel .filepond--panel-bottom {
+    box-shadow: 0 0.0625em 0.125em -0.0625em rgba(0, 0, 0, 0.25);
+}
+.filepond--item {
+    /* drag related */
+}
+.filepond--item > .filepond--file-wrapper,
+.filepond--item > .filepond--panel {
+    transition: opacity 0.15s ease-out;
+}
+.filepond--item[data-drag-state] {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+.filepond--item[data-drag-state] > .filepond--panel {
+    transition: box-shadow 0.125s ease-in-out;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.filepond--item[data-drag-state='drag'] {
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+}
+.filepond--item[data-drag-state='drag'] > .filepond--panel {
+    box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.325);
+}
+.filepond--item[data-drag-state]:not([data-drag-state='idle']) {
+    z-index: 2;
+}
+/* states */
+.filepond--item-panel {
+    background-color: #64605e;
+}
+[data-filepond-item-state='processing-complete'] .filepond--item-panel {
+    background-color: #369763;
+}
+[data-filepond-item-state*='invalid'] .filepond--item-panel,
+[data-filepond-item-state*='error'] .filepond--item-panel {
+    background-color: #c44e47;
+}
+/* style of item panel */
+.filepond--item-panel {
+    border-radius: 0.5em;
+    transition: background-color 0.25s;
+}
+/* normal mode */
+.filepond--list-scroller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    will-change: transform;
+}
+/* scroll mode */
+.filepond--list-scroller[data-state='overflow'] .filepond--list {
+    bottom: 0;
+    right: 0;
+}
+.filepond--list-scroller[data-state='overflow'] {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask: linear-gradient(to bottom, #000 calc(100% - 0.5em), transparent 100%);
+    mask: linear-gradient(to bottom, #000 calc(100% - 0.5em), transparent 100%);
+}
+/* style scrollbar */
+.filepond--list-scroller::-webkit-scrollbar {
+    background: transparent;
+}
+.filepond--list-scroller::-webkit-scrollbar:vertical {
+    width: 1em;
+}
+.filepond--list-scroller::-webkit-scrollbar:horizontal {
+    height: 0;
+}
+.filepond--list-scroller::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 99999px;
+    border: 0.3125em solid transparent;
+    background-clip: content-box;
+}
+/* hard to overide styles on purpose */
+.filepond--list.filepond--list {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    /* prevents endless paint calls on filepond--list-scroller */
+    will-change: transform;
+}
+/* used for padding so allowed to be restyled */
+.filepond--list {
+    left: 0.75em;
+    right: 0.75em;
+}
+.filepond--root[data-style-panel-layout~='integrated'] {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--panel-root,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--panel-root {
+    border-radius: 0;
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--panel-root > *,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--panel-root > * {
+    display: none;
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--drop-label,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--drop-label {
+    bottom: 0;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 7;
+}
+.filepond--root[data-style-panel-layout~='circle'],
+.filepond--root[data-style-panel-layout~='integrated'] {
+    /* we're only loading one item, this makes the intro animation a bit nicer */
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--item-panel,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--item-panel {
+    display: none;
+}
+.filepond--root[data-style-panel-layout~='compact'] .filepond--list-scroller,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--list-scroller {
+    overflow: hidden;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.filepond--root[data-style-panel-layout~='compact'] .filepond--list,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--list {
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+.filepond--root[data-style-panel-layout~='compact'] .filepond--item,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--item {
+    margin: 0;
+}
+.filepond--root[data-style-panel-layout~='compact'] .filepond--file-wrapper,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--file-wrapper {
+    height: 100%;
+}
+.filepond--root[data-style-panel-layout~='compact'] .filepond--drop-label,
+.filepond--root[data-style-panel-layout~='integrated'] .filepond--drop-label {
+    z-index: 7;
+}
+.filepond--root[data-style-panel-layout~='circle'] {
+    border-radius: 99999rem;
+    overflow: hidden;
+}
+.filepond--root[data-style-panel-layout~='circle'] > .filepond--panel {
+    border-radius: inherit;
+}
+.filepond--root[data-style-panel-layout~='circle'] > .filepond--panel > * {
+    display: none;
+}
+.filepond--root[data-style-panel-layout~='circle'] {
+    /* circle cuts of this info, so best to hide it */
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--file-info {
+    display: none;
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--file-status {
+    display: none;
+}
+.filepond--root[data-style-panel-layout~='circle'] .filepond--action-edit-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+/* dirfty way to fix circular overflow issue on safari 11+ */
+@media not all and (-webkit-min-device-pixel-ratio: 0), not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+        .filepond--root[data-style-panel-layout~='circle'] {
+            will-change: transform;
+        }
+    }
+}
+.filepond--panel-root {
+    border-radius: 0.5em;
+    background-color: #f1f0ef;
+}
+.filepond--panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: 0;
+
+    /* defaults to 100% height (fixed height mode) this fixes problem with panel height in IE11 */
+    height: 100% !important;
+
+    /* no interaction possible with panel */
+    pointer-events: none;
+}
+.filepond-panel:not([data-scalable='false']) {
+    height: auto !important;
+}
+.filepond--panel[data-scalable='false'] > div {
+    display: none;
+}
+.filepond--panel[data-scalable='true'] {
+    /* this seems to fix Chrome performance issues */
+    /* - when box-shadow is enabled */
+    /* - when multiple ponds are active on the same page */
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    /* prevent borders and backgrounds */
+    background-color: transparent !important;
+    border: none !important;
+}
+.filepond--panel-top,
+.filepond--panel-bottom,
+.filepond--panel-center {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+}
+.filepond--panel-top,
+.filepond--panel-bottom {
+    height: 0.5em;
+}
+.filepond--panel-top {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom: none !important;
+
+    /* fixes tiny transparant line between top and center panel */
+}
+.filepond--panel-top::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    background-color: inherit;
+}
+.filepond--panel-center,
+.filepond--panel-bottom {
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: translate3d(0, 0.5em, 0);
+    transform: translate3d(0, 0.5em, 0);
+}
+.filepond--panel-bottom {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-top: none !important;
+
+    /* fixes tiny transparant line between bottom and center of panel */
+}
+.filepond--panel-bottom::before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    left: 0;
+    right: 0;
+    top: -1px;
+    background-color: inherit;
+}
+.filepond--panel-center {
+    /* the center panel is scaled using scale3d to fit the correct height */
+    /* we use 100px instead of 1px as scaling 1px to a huge height is really laggy on chrome */
+    height: 100px !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+
+    /* hide if not transformed, prevents a little flash when the panel is at 100px height while attached for first time */
+}
+.filepond--panel-center:not([style]) {
+    visibility: hidden;
+}
+.filepond--progress-indicator {
+    position: static;
+    width: 1.25em;
+    height: 1.25em;
+
+    color: #fff;
+
+    /* can't have margins */
+    margin: 0;
+
+    /* no interaction possible with progress indicator */
+    pointer-events: none;
+
+    /* will be animated */
+    will-change: transform, opacity;
+}
+.filepond--progress-indicator svg {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    transform-box: fill-box; /* should center the animation correctly when zoomed in */
+}
+.filepond--progress-indicator path {
+    fill: none;
+    stroke: currentColor;
+}
+.filepond--list-scroller {
+    z-index: 6;
+}
+.filepond--drop-label {
+    z-index: 5;
+}
+.filepond--drip {
+    z-index: 3;
+}
+.filepond--root > .filepond--panel {
+    z-index: 2;
+}
+.filepond--browser {
+    z-index: 1;
+}
+.filepond--root {
+    /* layout*/
+    box-sizing: border-box;
+    position: relative;
+    margin-bottom: 1em;
+
+    /* base font size for whole component */
+    font-size: 1rem;
+
+    /* base line height */
+    line-height: normal;
+
+    /* up uses default system font family */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+    /* will increase font weight a bit on Safari */
+    font-weight: 450;
+
+    /* default text alignment */
+    text-align: left;
+
+    /* better text rendering on Safari */
+    text-rendering: optimizeLegibility;
+
+    /* text direction is ltr for now */
+    direction: ltr;
+
+    /* optimize rendering */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/contain */
+    contain: layout style size;
+
+    /* correct box sizing, line-height and positioning on child elements */
+}
+.filepond--root * {
+    box-sizing: inherit;
+    line-height: inherit;
+}
+.filepond--root *:not(text) {
+    font-size: inherit;
+}
+.filepond--root {
+    /* block everything */
+}
+.filepond--root[data-disabled] {
+    pointer-events: none;
+}
+.filepond--root[data-disabled] .filepond--list-scroller {
+    pointer-events: all;
+}
+.filepond--root[data-disabled] .filepond--list {
+    pointer-events: none;
+}
+/**
+ * Root element children layout
+ */
+.filepond--root .filepond--drop-label {
+    min-height: 4.75em;
+}
+.filepond--root .filepond--list-scroller {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.filepond--root .filepond--credits {
+    position: absolute;
+    right: 0;
+    opacity: 0.175;
+    line-height: 0.85;
+    font-size: 11px;
+    color: inherit;
+    text-decoration: none;
+    z-index: 3;
+    bottom: -14px;
+}
+.filepond--root .filepond--credits[style] {
+    top: 0;
+    bottom: auto;
+    margin-top: 14px;
+}
+
 /*
 ! tailwindcss v3.1.3 | MIT License | https://tailwindcss.com
-*//*
+*/
+/*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
 */
-
 *,
 ::before,
 ::after {
@@ -13,19 +1061,16 @@
   border-style: solid; /* 2 */
   border-color: #e5e7eb; /* 2 */
 }
-
 ::before,
 ::after {
   --tw-content: '';
 }
-
 /*
 1. Use a consistent sensible line-height in all browsers.
 2. Prevent adjustments of font size after orientation changes in iOS.
 3. Use a more readable tab size.
 4. Use the user's configured `sans` font-family by default.
 */
-
 html {
   line-height: 1.5; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
@@ -34,42 +1079,34 @@ html {
      tab-size: 4; /* 3 */
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
 }
-
 /*
 1. Remove the margin in all browsers.
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
 */
-
 body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
 }
-
 /*
 1. Add the correct height in Firefox.
 2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
 3. Ensure horizontal rules are visible by default.
 */
-
 hr {
   height: 0; /* 1 */
   color: inherit; /* 2 */
   border-top-width: 1px; /* 3 */
 }
-
 /*
 Add the correct text decoration in Chrome, Edge, and Safari.
 */
-
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
           text-decoration: underline dotted;
 }
-
 /*
 Remove the default font size and weight for headings.
 */
-
 h1,
 h2,
 h3,
@@ -79,30 +1116,24 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
 }
-
 /*
 Reset links to optimize for opt-in styling instead of opt-out.
 */
-
 a {
   color: inherit;
   text-decoration: inherit;
 }
-
 /*
 Add the correct font weight in Edge and Safari.
 */
-
 b,
 strong {
   font-weight: bolder;
 }
-
 /*
 1. Use the user's configured `mono` font family by default.
 2. Correct the odd `em` font sizing in all browsers.
 */
-
 code,
 kbd,
 samp,
@@ -110,19 +1141,15 @@ pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
-
 /*
 Add the correct font size in all browsers.
 */
-
 small {
   font-size: 80%;
 }
-
 /*
 Prevent `sub` and `sup` elements from affecting the line height in all browsers.
 */
-
 sub,
 sup {
   font-size: 75%;
@@ -130,33 +1157,27 @@ sup {
   position: relative;
   vertical-align: baseline;
 }
-
 sub {
   bottom: -0.25em;
 }
-
 sup {
   top: -0.5em;
 }
-
 /*
 1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
 2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
 3. Remove gaps between table borders by default.
 */
-
 table {
   text-indent: 0; /* 1 */
   border-color: inherit; /* 2 */
   border-collapse: collapse; /* 3 */
 }
-
 /*
 1. Change the font styles in all browsers.
 2. Remove the margin in Firefox and Safari.
 3. Remove default padding in all browsers.
 */
-
 button,
 input,
 optgroup,
@@ -170,21 +1191,17 @@ textarea {
   margin: 0; /* 2 */
   padding: 0; /* 3 */
 }
-
 /*
 Remove the inheritance of text transform in Edge and Firefox.
 */
-
 button,
 select {
   text-transform: none;
 }
-
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Remove default button styles.
 */
-
 button,
 [type='button'],
 [type='reset'],
@@ -193,80 +1210,62 @@ button,
   background-color: transparent; /* 2 */
   background-image: none; /* 2 */
 }
-
 /*
 Use the modern Firefox focus style for all focusable elements.
 */
-
 :-moz-focusring {
   outline: auto;
 }
-
 /*
 Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
 */
-
 :-moz-ui-invalid {
   box-shadow: none;
 }
-
 /*
 Add the correct vertical alignment in Chrome and Firefox.
 */
-
 progress {
   vertical-align: baseline;
 }
-
 /*
 Correct the cursor style of increment and decrement buttons in Safari.
 */
-
 ::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   height: auto;
 }
-
 /*
 1. Correct the odd appearance in Chrome and Safari.
 2. Correct the outline style in Safari.
 */
-
 [type='search'] {
   -webkit-appearance: textfield; /* 1 */
   outline-offset: -2px; /* 2 */
 }
-
 /*
 Remove the inner padding in Chrome and Safari on macOS.
 */
-
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
-
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Change font properties to `inherit` in Safari.
 */
-
 ::-webkit-file-upload-button {
   -webkit-appearance: button; /* 1 */
   font: inherit; /* 2 */
 }
-
 /*
 Add the correct display in Chrome and Safari.
 */
-
 summary {
   display: list-item;
 }
-
 /*
 Removes the default spacing and border for appropriate elements.
 */
-
 blockquote,
 dl,
 dd,
@@ -282,16 +1281,13 @@ p,
 pre {
   margin: 0;
 }
-
 fieldset {
   margin: 0;
   padding: 0;
 }
-
 legend {
   padding: 0;
 }
-
 ol,
 ul,
 menu {
@@ -299,58 +1295,47 @@ menu {
   margin: 0;
   padding: 0;
 }
-
 /*
 Prevent resizing textareas horizontally by default.
 */
-
 textarea {
   resize: vertical;
 }
-
 /*
 1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
-
 input::-moz-placeholder, textarea::-moz-placeholder {
   opacity: 1; /* 1 */
   color: #9ca3af; /* 2 */
 }
-
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   opacity: 1; /* 1 */
   color: #9ca3af; /* 2 */
 }
-
 input::placeholder,
 textarea::placeholder {
   opacity: 1; /* 1 */
   color: #9ca3af; /* 2 */
 }
-
 /*
 Set the default cursor for buttons.
 */
-
 button,
 [role="button"] {
   cursor: pointer;
 }
-
 /*
 Make sure disabled buttons don't get the pointer cursor.
 */
 :disabled {
   cursor: default;
 }
-
 /*
 1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
 2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
    This can trigger a poorly considered lint error in some tools but is included by design.
 */
-
 img,
 svg,
 video,
@@ -362,18 +1347,15 @@ object {
   display: block; /* 1 */
   vertical-align: middle; /* 2 */
 }
-
 /*
 Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
 */
-
 img,
 video {
   max-width: 100%;
   height: auto;
 }
-
-*, ::before, ::after {
+*, ::before, ::after{
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -419,8 +1401,7 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
-
-::-webkit-backdrop {
+::-webkit-backdrop{
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -466,8 +1447,7 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
-
-::backdrop {
+::backdrop{
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -513,212 +1493,311 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
-.container {
-  width: 100%;
+.z-10{
+  z-index: 10;
 }
-@media (min-width: 640px) {
-
-  .container {
-    max-width: 640px;
-  }
+.col-span-2{
+  grid-column: span 2 / span 2;
 }
-@media (min-width: 768px) {
-
-  .container {
-    max-width: 768px;
-  }
+.col-span-4{
+  grid-column: span 4 / span 4;
 }
-@media (min-width: 1024px) {
-
-  .container {
-    max-width: 1024px;
-  }
-}
-@media (min-width: 1280px) {
-
-  .container {
-    max-width: 1280px;
-  }
-}
-@media (min-width: 1536px) {
-
-  .container {
-    max-width: 1536px;
-  }
-}
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-}
-.mx-auto {
+.mx-auto{
   margin-left: auto;
   margin-right: auto;
 }
-.flex {
+.my-12{
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.my-6{
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.mb-16{
+  margin-bottom: 4rem;
+}
+.block{
+  display: block;
+}
+.flex{
   display: flex;
 }
-.grid {
+.grid{
   display: grid;
 }
-.h-16 {
-  height: 4rem;
+.h-10{
+  height: 2.5rem;
 }
-.h-20 {
-  height: 5rem;
-}
-.h-8 {
-  height: 2rem;
-}
-.h-12 {
-  height: 3rem;
-}
-.h-4 {
+.h-4{
   height: 1rem;
 }
-.w-4 {
+.h-12{
+  height: 3rem;
+}
+.h-8{
+  height: 2rem;
+}
+.h-20{
+  height: 5rem;
+}
+.w-10{
+  width: 2.5rem;
+}
+.w-4{
   width: 1rem;
 }
-.max-w-lg {
-  max-width: 32rem;
+.w-full{
+  width: 100%;
 }
-.max-w-2xl {
-  max-width: 42rem;
-}
-.max-w-xl {
-  max-width: 36rem;
-}
-.max-w-4xl {
-  max-width: 56rem;
-}
-.max-w-5xl {
+.max-w-5xl{
   max-width: 64rem;
 }
-.grid-cols-3 {
+.transform{
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.grid-cols-3{
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.grid-cols-1 {
+.grid-cols-2{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-6{
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.grid-cols-1{
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
-.grid-cols-5 {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+.grid-cols-4{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-.flex-col {
+.flex-col{
   flex-direction: column;
 }
-.items-start {
+.items-start{
   align-items: flex-start;
 }
-.items-center {
+.items-center{
   align-items: center;
 }
-.justify-center {
+.justify-end{
+  justify-content: flex-end;
+}
+.justify-center{
   justify-content: center;
 }
-.justify-between {
+.justify-between{
   justify-content: space-between;
 }
-.gap-6 {
-  gap: 1.5rem;
-}
-.gap-8 {
+.gap-8{
   gap: 2rem;
 }
-.gap-3 {
+.gap-6{
+  gap: 1.5rem;
+}
+.gap-3{
   gap: 0.75rem;
 }
-.rounded-md {
-  border-radius: 0.375rem;
+.gap-12{
+  gap: 3rem;
 }
-.rounded-sm {
+.divide-purple-100 > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-opacity: 1;
+  border-color: rgb(243 232 255 / var(--tw-divide-opacity));
+}
+.overflow-hidden{
+  overflow: hidden;
+}
+.rounded-sm{
   border-radius: 0.125rem;
 }
-.rounded-full {
+.rounded-full{
   border-radius: 9999px;
 }
-.border-b {
+.rounded-md{
+  border-radius: 0.375rem;
+}
+.border{
+  border-width: 1px;
+}
+.border-b-4{
+  border-bottom-width: 4px;
+}
+.border-b{
   border-bottom-width: 1px;
 }
-.bg-white {
+.border-purple-100{
+  --tw-border-opacity: 1;
+  border-color: rgb(243 232 255 / var(--tw-border-opacity));
+}
+.bg-purple-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 232 255 / var(--tw-bg-opacity));
+}
+.bg-amber-200{
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
+}
+.bg-amber-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 251 235 / var(--tw-bg-opacity));
+}
+.bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
-.bg-yellow-100 {
+.bg-purple-700{
+  --tw-bg-opacity: 1;
+  background-color: rgb(126 34 206 / var(--tw-bg-opacity));
+}
+.bg-green-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 253 244 / var(--tw-bg-opacity));
+}
+.bg-yellow-100{
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
-.bg-yellow-50 {
+.bg-purple-200{
   --tw-bg-opacity: 1;
-  background-color: rgb(254 252 232 / var(--tw-bg-opacity));
+  background-color: rgb(233 213 255 / var(--tw-bg-opacity));
 }
-.bg-orange-500 {
+.bg-amber-700{
   --tw-bg-opacity: 1;
-  background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+  background-color: rgb(180 83 9 / var(--tw-bg-opacity));
 }
-.bg-orange-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(194 65 12 / var(--tw-bg-opacity));
-}
-.bg-green-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
-}
-.p-6 {
+.p-6{
   padding: 1.5rem;
 }
-.py-16 {
+.p-16{
+  padding: 4rem;
+}
+.py-16{
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
-.px-3 {
+.px-6{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+.py-4{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.py-2{
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.px-3{
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
-.pb-6 {
-  padding-bottom: 1.5rem;
-}
-.pb-3 {
+.pb-3{
   padding-bottom: 0.75rem;
 }
-.text-center {
+.text-center{
   text-align: center;
 }
-.text-justify {
-  text-align: justify;
-}
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.text-xs {
+.text-xs{
   font-size: 0.75rem;
   line-height: 1rem;
 }
-.font-semibold {
+.text-lg{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.text-sm{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.font-semibold{
   font-weight: 600;
 }
-.uppercase {
+.uppercase{
   text-transform: uppercase;
 }
-.text-white {
+.text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
-.antialiased {
+.text-purple-700{
+  --tw-text-opacity: 1;
+  color: rgb(126 34 206 / var(--tw-text-opacity));
+}
+.antialiased{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.shadow-md {
+.shadow-xl{
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-md{
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.shadow-xl {
-  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+.shadow-lg{
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-amber-500\/40{
+  --tw-shadow-color: rgb(245 158 11 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+.shadow-teal-500\/40{
+  --tw-shadow-color: rgb(20 184 166 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+.outline-none{
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/**
+ * TipTap
+ */
+.ProseMirror{
+  padding: 0.75rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/**
+ * Filepond
+ */
+.filepond--drop-label{
+  --tw-text-opacity: 1;
+  color: rgb(126 34 206 / var(--tw-text-opacity));
+}
+
+.filepond--label-action{
+  -webkit-text-decoration-color: #7e22ce;
+          text-decoration-color: #7e22ce;
+}
+
+.filepond--panel-root{
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 232 255 / var(--tw-bg-opacity));
+}
+
+.placeholder\:text-purple-200::-moz-placeholder{
+  --tw-text-opacity: 1;
+  color: rgb(233 213 255 / var(--tw-text-opacity));
+}
+
+.placeholder\:text-purple-200:-ms-input-placeholder{
+  --tw-text-opacity: 1;
+  color: rgb(233 213 255 / var(--tw-text-opacity));
+}
+
+.placeholder\:text-purple-200::placeholder{
+  --tw-text-opacity: 1;
+  color: rgb(233 213 255 / var(--tw-text-opacity));
 }
 

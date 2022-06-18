@@ -7,8 +7,8 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
         @stack('styles')
     </head>
-    <body class="antialiased bg-yellow-50">
-        <header class="bg-white border-b border-grey-50">
+    <body class="antialiased bg-amber-200">
+        <header class="bg-amber-50">
             @include('front-end._partials.navigation')
         </header>
         <main class="max-w-5xl mx-auto py-16">
@@ -18,5 +18,6 @@
             @include('front-end._partials.footer')
         </footer>
         @stack('scripts')
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

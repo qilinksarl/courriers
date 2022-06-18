@@ -28,7 +28,9 @@ class LetterController extends Controller
      */
     public function edit(?Template $template): View
     {
-        return view('front-end.sale-process.letter-edit');
+        return view('front-end.sale-process.letter-edit', [
+            'template' => $template,
+        ]);
     }
 
     public function update()

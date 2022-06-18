@@ -1,5 +1,5 @@
 <div class="max-w-5xl mx-auto h-20 flex items-center justify-between gap-8">
-    <div>LOGO</div>
+    <div><a href="{{ route('frontend.homepage') }}">LOGO</a></div>
     @if(!in_array(request()->segment(2), ['rediger', 'importer', 'recipient', 'sender']) || !request()->segments())
         <nav class="flex gap-8">
             <a href="{{ route('frontend.homepage') }}">Accuel</a>

@@ -13,8 +13,6 @@ class TemplatePageController extends Controller
      */
     public function index(): View
     {
-        return view('front-end.templates.index', [
-            'templateCategories' => Category::orderBy('name')->get(),
-        ]);
+        return view('front-end.templates.index');
     }
 }

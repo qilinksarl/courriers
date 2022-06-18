@@ -1,3 +1,26 @@
+@import "filepond/dist/filepond.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * TipTap
+ */
+.ProseMirror {
+    @apply outline-none p-3;
+}
+
+/**
+ * Filepond
+ */
+.filepond--drop-label {
+    @apply text-purple-700;
+}
+
+.filepond--label-action {
+    @apply decoration-purple-700;
+}
+
+.filepond--panel-root {
+    @apply bg-purple-100;
+}

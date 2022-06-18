@@ -4,6 +4,7 @@ use App\Http\Controllers\FrontEnd\ContactController;
 use App\Http\Controllers\FrontEnd\HomePageController;
 use App\Http\Controllers\FrontEnd\SaleProcess\LetterController;
 use App\Http\Controllers\FrontEnd\SaleProcess\LetterDocumentController;
+use App\Http\Controllers\FrontEnd\SaleProcess\PaymentController;
 use App\Http\Controllers\FrontEnd\SaleProcess\RecipientController;
 use App\Http\Controllers\FrontEnd\SaleProcess\SenderController;
 use App\Http\Controllers\FrontEnd\StaticPageController;
@@ -74,6 +75,12 @@ Route::get(
     [SenderController::class, 'show'],
 )
     ->name('frontend.letter.sender');
+
+Route::get(
+    '/lettre/paiement',
+    PaymentController::class,
+)
+    ->name('frontend.letter.payment');
 
 /**
  * Pages

@@ -7,13 +7,8 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function show()
+    public function __invoke()
     {
-
-    }
-
-    public function store()
-    {
-
+        return view('front-end.sale-process.letter-payment');
     }
 }
