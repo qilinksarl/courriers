@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontEnd\HomePageController;
 use App\Http\Controllers\FrontEnd\SaleProcess\LetterController;
 use App\Http\Controllers\FrontEnd\SaleProcess\LetterDocumentController;
 use App\Http\Controllers\FrontEnd\SaleProcess\PaymentController;
+use App\Http\Controllers\FrontEnd\SaleProcess\PostageController;
 use App\Http\Controllers\FrontEnd\SaleProcess\RecipientController;
 use App\Http\Controllers\FrontEnd\SaleProcess\SenderController;
 use App\Http\Controllers\FrontEnd\StaticPageController;
@@ -42,18 +43,24 @@ Route::get(
  */
 Route::get(
     '/lettre/rediger',
-    [LetterController::class, 'show'],
+    [LetterController::class, 'edit'],
 )
     ->name('frontend.letter.edit');
 
 Route::get(
-    '/lettre/models',
+    '/lettre/modeles',
     [TemplatePageController::class, 'index'],
 )
     ->name('frontend.letter.templates');
 
 Route::get(
-    '/lettre/models/{template}',
+    '/lettre/marques-modeles',
+    [TemplatePageController::class, 'index'],
+)
+    ->name('frontend.letter.brands-models');
+
+Route::get(
+    '/lettre/models/{slug}',
     [LetterController::class, 'edit'],
 )
     ->name('frontend.template.edit');
@@ -63,6 +70,12 @@ Route::get(
     [LetterDocumentController::class, 'show'],
 )
     ->name('frontend.letter.import');
+
+Route::get(
+    '/lettre/affranchissement',
+    [PostageController::class, 'show'],
+)
+    ->name('frontend.letter.postage');
 
 Route::get(
     '/lettre/destinataire',
@@ -90,4 +103,14 @@ Route::get(
     StaticPageController::class
 )
     ->name('frontend.staticpage')
-    ->whereIn('slug', ['envoyer', 'faq', 'prix']);
+    ->whereIn('slug', [
+        'prix',
+        'faq',
+        'marques-modeles',
+        'desabonnement',
+        'politique-cookies',
+        'mentions-legales',
+        'conditions-generales',
+        'politique-cookies',
+        'abonnement',
+    ]);

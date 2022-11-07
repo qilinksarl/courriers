@@ -1,7 +1,13 @@
-<form wire:submit.prevent="save" class="grid grid-cols-2 gap-6 bg-white p-6 rounded-md shadow-xl shadow-amber-500/40">
+<form wire:submit.prevent="save" class="grid grid-cols-2 gap-6 bg-white p-6 rounded-md shadow-xl shadow-gray-300/40">
     <div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aperiam architecto assumenda consequatur deleniti exercitationem iusto odio.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        @if($errors->any())
+            @foreach($errors->all() as $message)
+                <p>{{ $message }}</p>
+            @endforeach
+        @else
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aperiam architecto assumenda consequatur deleniti exercitationem iusto odio.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        @endif
     </div>
     <div><x-files wire:model="files" /></div>
     <div class="col-span-2 flex justify-end">

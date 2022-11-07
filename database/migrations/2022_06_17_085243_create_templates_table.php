@@ -16,14 +16,11 @@ return new class extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->text('content')->nullable();
+            $table->string('name')->fulltext();
+            $table->string('slug')->unique();
             $table->jsonb('model');
-            $table->foreignIdFor(Category::class)
-                ->nullable()
-                ->constrained()
-                ->onDelete('SET NULL');
+            $table->bigInteger('views')->default(0);
+            $table->bigInteger('purchased')->default(0);
             $table->timestamps();
         });
     }

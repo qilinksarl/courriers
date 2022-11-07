@@ -7,11 +7,11 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
         @stack('styles')
     </head>
-    <body class="antialiased bg-amber-200">
-        <header class="bg-amber-50">
+    <body class="antialiased bg-amber-500">
+        <header class="bg-gray-50 border-b-2 border-gray-100">
             @include('front-end._partials.navigation')
         </header>
-        <main class="max-w-5xl mx-auto py-16">
+        <main class="{{ $bg ?? 'bg-gray-50' }}">
             @yield('main')
         </main>
         <footer>

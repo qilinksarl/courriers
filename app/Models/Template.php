@@ -2,21 +2,28 @@
 
 namespace App\Models;
 
+use App\DataTransferObjects\ModelData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Template extends Model
 {
     use HasFactory;
+    use HasSlug;
 
     protected $fillable = [
         'name',
         'model',
+        'views',
+        'purchased',
     ];
 
     protected $casts = [
-        'model' => 'array'
+        'model' => ModelData::class,
     ];
 
     /**
@@ -30,10 +37,28 @@ class Template extends Model
     }
 
     /**
-     * @return BelongsTo
+     * Get the options for generating the slug.
      */
-    public function category(): BelongsTo
+    public function getSlugOptions() : SlugOptions
     {
-        return $this->belongsTo(Category::class);
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function categories(): MorphToMany
+    {
+        return $this->morphToMany(Category::class, 'categorizable');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function template(): HasMany
+    {
+        return $this->hasMany(Brand::class);
     }
 }

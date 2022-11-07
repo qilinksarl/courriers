@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center justify-center gap-3">
-    <div class="bg-yellow-100 h-4 w-4 rounded-full"></div>
+<div class="breadcrumb-item {{ ($step->active) ? 'active' : '' }}">
+    <div class="h-12 w-12"></div>
     <div>{{ $step->name }}</div>
 </div>

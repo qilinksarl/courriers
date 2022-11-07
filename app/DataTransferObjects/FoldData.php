@@ -3,6 +3,7 @@
 namespace App\DataTransferObjects;
 
 use App\Models\Fold;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
@@ -15,13 +16,17 @@ class FoldData extends Data
      * @param AddressData|null $recipient
      */
     public function __construct(
-        /** @var DocumentData */
+        #[DataCollectionOf(DocumentData::class)]
         public Lazy|DataCollection|null $documents = null,
         public ?AddressData $sender = null,
         public ?AddressData $recipient = null,
     ){
     }
 
+    /**
+     * @param array $fold
+     * @return self
+     */
     public static function fromArray(array $fold): self
     {
         return new self(
@@ -31,6 +36,10 @@ class FoldData extends Data
         );
     }
 
+    /**
+     * @param Fold $fold
+     * @return self
+     */
     public static function fromModel(Fold $fold): self
     {
         return new self(

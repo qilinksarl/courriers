@@ -10875,6 +10875,171 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/Tiptap/NodeAddressField.js":
+/*!*************************************************!*\
+  !*** ./resources/js/Tiptap/NodeAddressField.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _tiptap_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tiptap/vue-3 */ "./node_modules/@tiptap/core/dist/tiptap-core.esm.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_tiptap_core__WEBPACK_IMPORTED_MODULE_0__.Node.create({
+  name: 'nodeAddressField',
+  group: 'block',
+  inline: false,
+  content: 'text*',
+  addAttributes: function addAttributes() {
+    return {
+      name: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('name');
+        }
+      },
+      left: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('left');
+        }
+      },
+      width: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('width');
+        }
+      },
+      height: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('height');
+        }
+      }
+    };
+  },
+  parseHTML: function parseHTML() {
+    return [{
+      tag: 'address-field'
+    }];
+  },
+  renderHTML: function renderHTML(_ref) {
+    var HTMLAttributes = _ref.HTMLAttributes;
+    return ['address-field', (0,_tiptap_core__WEBPACK_IMPORTED_MODULE_0__.mergeAttributes)(HTMLAttributes)];
+  },
+  addNodeView: function addNodeView() {
+    return function (_ref2) {
+      var editor = _ref2.editor,
+          node = _ref2.node,
+          getPos = _ref2.getPos,
+          HTMLAttributes = _ref2.HTMLAttributes,
+          decorations = _ref2.decorations,
+          extension = _ref2.extension;
+      var dom = document.createElement('div');
+      dom.classList.add('address__field');
+      dom.id = HTMLAttributes.name;
+      dom.contentEditable = false;
+      var container = document.createElement('div');
+      container.classList.add('address__container');
+      container.contentEditable = false;
+      container.style.left = HTMLAttributes.left + '%';
+      container.style.width = HTMLAttributes.width + '%';
+      container.style.paddingTop = HTMLAttributes.height + '%';
+      var group = document.createElement('div');
+      group.classList.add('address__group');
+      group.contentEditable = false;
+      group.style.left = HTMLAttributes.left + '%';
+      group.style.width = HTMLAttributes.width + '%';
+
+      for (var i = 1; i <= 3; i++) {
+        var line_address = document.createElement('div');
+        line_address.contentEditable = true;
+        line_address.setAttribute('aria-placeholder', 'line_address_' + i);
+        group.appendChild(line_address);
+      }
+
+      dom.appendChild(container);
+      dom.appendChild(group);
+      return {
+        dom: dom
+      };
+    };
+  }
+}));
+
+/***/ }),
+
+/***/ "./resources/js/Tiptap/NodeTextField.js":
+/*!**********************************************!*\
+  !*** ./resources/js/Tiptap/NodeTextField.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _tiptap_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tiptap/vue-3 */ "./node_modules/@tiptap/core/dist/tiptap-core.esm.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_tiptap_core__WEBPACK_IMPORTED_MODULE_0__.Node.create({
+  name: 'nodeTextField',
+  group: 'inline',
+  inline: true,
+  content: 'text*',
+  addAttributes: function addAttributes() {
+    return {
+      id: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('id');
+        }
+      },
+      label: {
+        parseHTML: function parseHTML(element) {
+          return element.getAttribute('label');
+        }
+      }
+    };
+  },
+  parseHTML: function parseHTML() {
+    return [{
+      tag: 'text'
+    }];
+  },
+  renderHTML: function renderHTML(_ref) {
+    var HTMLAttributes = _ref.HTMLAttributes;
+    return ['text', (0,_tiptap_core__WEBPACK_IMPORTED_MODULE_0__.mergeAttributes)(HTMLAttributes)];
+  },
+  addNodeView: function addNodeView() {
+    return function (_ref2) {
+      var editor = _ref2.editor,
+          node = _ref2.node,
+          getPos = _ref2.getPos,
+          HTMLAttributes = _ref2.HTMLAttributes,
+          decorations = _ref2.decorations,
+          extension = _ref2.extension;
+      var dom = document.createElement('div');
+      var innerText = document.createElement('div');
+      dom.id = HTMLAttributes.id;
+      dom.classList.add('text__input');
+      innerText.contentEditable = true;
+      innerText.setAttribute('aria-placeholder', HTMLAttributes.label);
+      innerText.addEventListener('blur', function (e) {
+        if (e.target.innerHTML === '<br>') {
+          e.target.innerHTML = null;
+        }
+      });
+      dom.appendChild(innerText);
+      return {
+        dom: dom
+      };
+    };
+  }
+}));
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -10885,11 +11050,15 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
-/* harmony import */ var _tiptap_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @tiptap/core */ "./node_modules/@tiptap/core/dist/tiptap-core.esm.js");
+/* harmony import */ var _tiptap_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @tiptap/core */ "./node_modules/@tiptap/core/dist/tiptap-core.esm.js");
 /* harmony import */ var _tiptap_starter_kit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tiptap/starter-kit */ "./node_modules/@tiptap/starter-kit/dist/tiptap-starter-kit.esm.js");
 /* harmony import */ var _tiptap_extension_underline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @tiptap/extension-underline */ "./node_modules/@tiptap/extension-underline/dist/tiptap-extension-underline.esm.js");
 /* harmony import */ var filepond__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! filepond */ "./node_modules/filepond/dist/filepond.js");
 /* harmony import */ var filepond__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(filepond__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Tiptap_NodeTextField__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Tiptap/NodeTextField */ "./resources/js/Tiptap/NodeTextField.js");
+/* harmony import */ var _Tiptap_NodeAddressField__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Tiptap/NodeAddressField */ "./resources/js/Tiptap/NodeAddressField.js");
+
+
 
 
 
@@ -10898,30 +11067,46 @@ __webpack_require__.r(__webpack_exports__);
 
 window.FilePond = filepond__WEBPACK_IMPORTED_MODULE_4__;
 
-window.setupEditor = function (content) {
+window.setupEditor = function (model) {
   return {
     editor: null,
-    content: content,
-    init: function init(element) {
+    content: model,
+    init: function init(element, isEditable) {
       var _this = this;
 
-      this.editor = new _tiptap_core__WEBPACK_IMPORTED_MODULE_5__.Editor({
+      this.editor = new _tiptap_core__WEBPACK_IMPORTED_MODULE_7__.Editor({
         element: element,
         extensions: [_tiptap_starter_kit__WEBPACK_IMPORTED_MODULE_2__["default"].configure({
           heading: {
             levels: [1, 2, 3]
           }
-        }), _tiptap_extension_underline__WEBPACK_IMPORTED_MODULE_3__["default"]],
-        content: this.content,
+        }), _tiptap_extension_underline__WEBPACK_IMPORTED_MODULE_3__["default"], _Tiptap_NodeTextField__WEBPACK_IMPORTED_MODULE_5__["default"]],
+        editable: isEditable,
+        content: "\n                    ".concat(this.content.text, "\n                "),
         onUpdate: function onUpdate(_ref) {
           var editor = _ref.editor;
-          _this.content = editor.getHTML();
+          _this.content.text = editor.getHTML();
+          _this.content.json = editor.getJSON();
+        },
+        onSelectionUpdate: function onSelectionUpdate(_ref2) {
+          var editor = _ref2.editor;
+          console.log('s', editor);
+        },
+        onTransaction: function onTransaction(_ref3) {
+          var editor = _ref3.editor,
+              transaction = _ref3.transaction;
+          console.log('t', transaction);
+        },
+        onFocus: function onFocus(_ref4) {
+          var editor = _ref4.editor,
+              event = _ref4.event;
+          console.log('e', event);
         }
       });
       this.$watch('content', function (content) {
-        if (content === _this.editor.getHTML()) return;
+        if (content.text === _this.editor.getHTML()) return;
 
-        _this.editor.commands.setContent(content, false);
+        _this.editor.commands.setContent(content.text, false);
       });
     }
   };

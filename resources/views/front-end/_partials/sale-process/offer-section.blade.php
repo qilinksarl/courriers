@@ -1,10 +1,10 @@
 <div class="grid grid-cols-3">
-    <label class="bg-white rounded-sm p-6 my-6 shadow-lg shadow-amber-500/40">
+    <label class="bg-white rounded-sm p-6 my-6 shadow-lg shadow-gray-300/40">
         <div>
             <input type="checkbox" name="promotion" wire:model="promotion" value="true">
         </div>
     </label>
-    <div class="bg-white rounded-md p-6 shadow-xl shadow-amber-500/40 relarive z-10">
+    <div class="bg-white rounded-md p-6 shadow-xl shadow-gray-300/40 relarive z-10">
         @if($promotionMessage)
             <div>Vous devez sélectionner une offre</div>
         @endif

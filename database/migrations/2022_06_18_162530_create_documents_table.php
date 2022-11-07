@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('size');
             $table->jsonb('form_data');
             $table->string('type');
-            $table->unsignedInteger('number_of_pages');
+            $table->unsignedInteger('number_of_pages')->default(1);
             $table->timestamps();
         });
     }

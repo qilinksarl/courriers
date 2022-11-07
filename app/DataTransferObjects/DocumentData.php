@@ -11,24 +11,28 @@ use Spatie\LaravelData\Data;
 class DocumentData extends Data
 {
     /**
-     * @param string $readable_file_name
      * @param string $file_name
-     * @param string $path
-     * @param int $size
-     * @param array|null $form_data
+     * @param string|null $readable_file_name
+     * @param string|null $path
+     * @param int|null $size
+     * @param ModelData|null $model
+     * @param string|null $letter
      * @param DocumentType $type
      * @param int $number_of_pages
      */
     public function __construct(
-        #[Nullable]
-        public ?string $readable_file_name,
         #[Required]
         public string $file_name,
-        #[Required]
-        public string $path,
-        #[Required,IntegerType]
-        public int $size,
-        public ?array $form_data = null,
+        #[Nullable]
+        public ?string $readable_file_name = null,
+        #[Nullable]
+        public ?string $path = null,
+        #[Nullable,IntegerType]
+        public ?int $size = null,
+        #[Nullable]
+        public ?ModelData $model = null,
+        #[Nullable]
+        public ?string $letter = null,
         #[Required]
         public DocumentType $type = DocumentType::PDF,
         #[Required,IntegerType]

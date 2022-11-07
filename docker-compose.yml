@@ -27,6 +27,7 @@ services:
             - redis
             - meilisearch
             - selenium
+            - gotenberg
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -84,6 +85,16 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+    gotenberg:
+        image: 'gotenberg/gotenberg:7'
+        ports:
+            - '${FORWARD_GOTENBERG_PORT:-3000}:3000'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:3000/health"]
+            retries: 3
+            timeout: 5s
 networks:
     sail:
         driver: bridge

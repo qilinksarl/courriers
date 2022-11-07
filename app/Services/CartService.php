@@ -7,19 +7,50 @@ use App\DataTransferObjects\AddressData;
 use App\DataTransferObjects\CustomerData;
 use App\DataTransferObjects\DocumentData;
 use App\DataTransferObjects\FoldData;
+use App\DataTransferObjects\OrderData;
+use App\Enums\PostageType;
+use App\Models\Brand;
+use App\Models\Template;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 final class CartService implements Cart
 {
     public function __construct()
     {
-        if(!Cache::has('cart')) {
-            Cache::put('cart', [
-                'documents' => null,
-                'sender' => null,
-                'recipient' => null,
+        if(!Session::has('cart')) {
+            Session::put('cart', [
+                'product' => null,
+                'documents' => DocumentData::empty(),
+                'sender' => AddressData::empty(),
+                'recipient' => AddressData::empty(),
+                'order' => OrderData::empty(),
             ]);
         }
+
+        if(!Session::has('customer')) {
+            Session::put('customer', CustomerData::empty());
+        }
+    }
+
+    /**
+     * @param Brand|Template|null $product
+     * @return void
+     */
+    public function addProduct(Brand|Template|null $product): void
+    {
+        $cart = Session::get('cart');
+        $cart['product'] = $product?->toArray();
+        Session::put('cart', $cart);
+    }
+
+    /**
+     * @return Brand|Template|null
+     */
+    public function getProduct(): Brand|Template|null
+    {
+        return Session::get('cart.product');
     }
 
     /**
@@ -28,9 +59,9 @@ final class CartService implements Cart
      */
     public function addDocuments(array $documents): void
     {
-        $cart = Cache::get('cart');
+        $cart = Session::get('cart');
         $cart['documents'] = DocumentData::collection($documents)->toArray();
-        Cache::put('cart', $cart);
+        Session::put('cart', $cart);
     }
 
     /**
@@ -38,7 +69,7 @@ final class CartService implements Cart
      */
     public function getFold(): FoldData
     {
-        return FoldData::fromArray(Cache::get('cart'));
+        return FoldData::fromArray(Arr::except(Session::get('cart'), ['product', 'order']));
     }
 
     /**
@@ -47,9 +78,17 @@ final class CartService implements Cart
      */
     public function addRecipient(AddressData $addressData): void
     {
-        $cart = Cache::get('cart');
+        $cart = Session::get('cart');
         $cart['recipient'] = $addressData->toArray();
-        Cache::put('cart', $cart);
+        Session::put('cart', $cart);
+    }
+
+    /**
+     * @return AddressData
+     */
+    public function getRecipient(): AddressData
+    {
+        return AddressData::from(Session::get('cart')['recipient']);
     }
 
     /**
@@ -58,9 +97,17 @@ final class CartService implements Cart
      */
     public function addSender(AddressData $addressData): void
     {
-        $cart = Cache::get('cart');
+        $cart = Session::get('cart');
         $cart['sender'] = $addressData->toArray();
-        Cache::put('cart', $cart);
+        Session::put('cart', $cart);
+    }
+
+    /**
+     * @return AddressData
+     */
+    public function getSender(): AddressData
+    {
+        return AddressData::from(Session::get('cart')['sender']);
     }
 
     /**
@@ -69,7 +116,7 @@ final class CartService implements Cart
      */
     public function addCustomer(CustomerData $customerData): void
     {
-        Cache::put('customer', $customerData->toArray());
+        Session::put('customer', $customerData->toArray());
     }
 
     /**
@@ -77,6 +124,22 @@ final class CartService implements Cart
      */
     public function getCustomer(): CustomerData
     {
-        return CustomerData::from(Cache::get('customer'));
+        return CustomerData::from(Session::get('customer'));
+    }
+
+    /**
+     * @param PostageType $postageType
+     * @return void
+     */
+    public function addPostageType(PostageType $postageType): void
+    {
+        $cart = Session::get('cart');
+        $cart['order']['postage'] = $postageType;
+        Session::put('cart', $cart);
+    }
+
+    public function getPostageType(): PostageType|null
+    {
+        return Session::get('cart.order.postage');
     }
 }

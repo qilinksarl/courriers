@@ -2,28 +2,31 @@
 
 namespace App\Http\Livewire;
 
+use App\Traits\WithPaymentGateway;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class LetterPaymentProcess extends Component
 {
+    use WithPaymentGateway;
+
     /**
      * @var bool
      */
     public bool $offerSelected = false;
 
     /**
-     * @var bool|null
+     * @var bool
      */
     public bool $promotion = false;
 
     /**
-     * @var bool|null
+     * @var bool
      */
     public bool $noPromotion = false;
 
     /**
-     * @var bool|null
+     * @var bool
      */
     public bool $promotionMessage = false;
 

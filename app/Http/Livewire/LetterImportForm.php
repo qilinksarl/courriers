@@ -6,6 +6,7 @@ use App\Contracts\Cart;
 use App\DataTransferObjects\DocumentData;
 use App\DataTransferObjects\FoldData;
 use App\Enums\DocumentType;
+use App\Traits\Documentable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -16,44 +17,28 @@ use Livewire\WithFileUploads;
 class LetterImportForm extends Component
 {
     use WithFileUploads;
+    use Documentable;
 
     /**
      * @var mixed
      */
     public mixed $files = [];
 
+    // TODO: Vérifier aussi la taille max du fichier
+    protected $rules = [
+        'files' => 'required',
+        'files.*' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,text/plain',
+    ];
+
     /**
      * @return RedirectResponse|Redirector
      */
     public function save(): RedirectResponse|Redirector
     {
-        $documents = [];
+        $this->validate();
 
-        foreach($this->files as $file) {
-            $segments = explode('/', $file->store('documents'));
-            $file_name = array_pop($segments);
-
-            $page = null;
-
-            if($file->getMimeType() === 'application/pdf') {
-                exec('/usr/bin/pdfinfo ' . $file->getRealPath() . ' | awk \'/Pages/ {print $2}\'', $page);
-            }
-
-            $documents[] = new DocumentData(
-                readable_file_name: $file->getClientOriginalName(),
-                file_name: $file_name,
-                path: implode('/', $segments),
-                size: $file->getSize(),
-                type: match($file->getMimeType()) {
-                    'application/pdf' => DocumentType::PDF,
-                },
-                number_of_pages: ($page) ? (int)$page[0] : 1,
-            );
-        }
-
-        (App::make(Cart::class))->addDocuments($documents);
-
-        return redirect()->route('frontend.letter.recipient');
+        (App::make(Cart::class))->addDocuments($this->makeDocuments($this->files));
+        return redirect()->route('frontend.letter.postage');
     }
 
     public function render()

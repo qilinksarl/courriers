@@ -4,22 +4,43 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Category extends Model
 {
     use HasFactory;
+    use HasSlug;
 
     protected $fillable = [
         'name',
-        'content',
+        'slug',
     ];
 
     /**
-     * @return HasMany
+     * Get the options for generating the slug.
      */
-    public function templates(): HasMany
+    public function getSlugOptions() : SlugOptions
     {
-        return $this->hasMany(Template::class);
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function templates(): MorphToMany
+    {
+        return $this->morphedByMany(Template::class, 'categorizable');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function brands(): MorphToMany
+    {
+        return $this->morphedByMany(Brand::class, 'categorizable');
     }
 }

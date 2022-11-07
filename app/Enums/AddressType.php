@@ -8,6 +8,6 @@ enum AddressType: string
 {
     use EnumToArray;
 
-    case PROFESSIONAL = 'Professional';
-    case PERSONAL = 'Personal';
+    case PROFESSIONAL = 'Professionnel';
+    case PERSONAL = 'Personnel';
 }

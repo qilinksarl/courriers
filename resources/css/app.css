@@ -3,11 +3,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+    font-size: 15px;
+}
+
+[x-cloak] { display: none !important; }
+
 /**
  * TipTap
  */
 .ProseMirror {
-    @apply outline-none p-3;
+    @apply outline-none mt-6 px-6 pb-6 pt-3 bg-gray-50 rounded-md;
+}
+
+.ProseMirror p {
+    @apply pt-3;
 }
 
 /**
@@ -22,5 +32,270 @@
 }
 
 .filepond--panel-root {
-    @apply bg-purple-100;
+    @apply bg-purple-50 rounded-md;
+}
+
+[data-filepond-item-state='processing-complete'] .filepond--item-panel {
+    @apply bg-amber-500;
+}
+
+/**
+ * Fields Editor
+ */
+
+.address__field {
+    @apply flex relative;
+}
+
+.address__container {
+    @apply relative flex border-2 border-dotted border-purple-100 rounded-md;
+}
+
+.address__group {
+    @apply absolute z-10 grid grid-cols-1 gap-2 p-2 top-0 left-0 bg-purple-300;
+}
+
+.address__group > div {
+    @apply bg-white rounded-md inline-block px-2 outline-none border border-purple-300;
+}
+
+.text__input {
+    @apply bg-purple-100 rounded-md inline-block px-2 outline-none;
+}
+
+.text__input > div {
+    @apply outline-none;
+}
+
+.text__input > div:empty:not(:focus):before {
+    content:attr(aria-placeholder);
+    @apply text-purple-700;
+}
+
+/**
+ * Breadcrump
+ */
+
+.breadcrumb {
+    @apply flex justify-between items-start text-base uppercase mb-16 rounded-md overflow-hidden;
+}
+
+.breadcrumb-item {
+    @apply relative flex items-center justify-center gap-3 flex-1 bg-purple-100 h-16 px-3 text-purple-700;
+}
+
+.breadcrumb-item > div {
+    @apply relative z-20;
+}
+
+.breadcrumb-item.active {
+    @apply bg-purple-700 text-white;
+}
+
+.breadcrumb-item::before {
+    content: "";
+    @apply z-10 absolute right-0 block w-16 h-16 bg-gray-50 rotate-45 skew-y-12 skew-x-12 transform translate-x-5;
+}
+
+.breadcrumb-item::after {
+    content: "";
+    @apply z-10 absolute right-0 block w-16 h-16 bg-purple-100 rotate-45 skew-y-12 skew-x-12 transform translate-x-4;
+}
+
+.breadcrumb-item.active::after {
+    @apply bg-purple-700;
+}
+
+
+/**
+ * Form
+ */
+
+.select {
+    @apply relative;
+}
+
+.select > select {
+    @apply relative cursor-pointer z-10;
+}
+
+.select:before {
+    content: "\2193";
+    @apply absolute w-8 h-8 bottom-0 right-0 z-0 flex items-center justify-center text-purple-700;
+}
+
+/**
+ * Article
+ */
+article > h2 + h3,
+article > h2 + h4,
+article > h2 + h5,
+article > h3 + h2,
+article > h3 + h4,
+article > h3 + h5,
+article > h4 + h2,
+article > h4 + h3,
+article > h4 + h5,
+article > h5 + h2,
+article > h5 + h3,
+article > h5 + h4 {
+    @apply mt-3;
+}
+
+article > h1 + p,
+article > h1 + ul,
+article > h1 + ol,
+article > h1 + blockquote,
+article > h1 + dl,
+article > h2 + p,
+article > h2 + ul,
+article > h2 + ol,
+article > h2 + blockquote,
+article > h2 + dl,
+article > h3 + p,
+article > h3 + ul,
+article > h3 + ol,
+article > h3 + blockquote,
+article > h3 + dl,
+article > h4 + p,
+article > h4 + ul,
+article > h4 + ol,
+article > h4 + blockquote,
+article > h4 + dl,
+article > h5 + p,
+article > h5 + ul,
+article > h5 + ol,
+article > h5 + blockquote,
+article > h5 + dl {
+    @apply mt-3 mb-3;
+}
+
+article > dl + h1,
+article > p + h2,
+article > ul + h2,
+article > ol + h2,
+article > blockquote + h2,
+article > dl + h2,
+article > p + h3,
+article > ul + h3,
+article > ol + h3,
+article > blockquote + h3,
+article > dl + h3,
+article > p + h4,
+article > ul + h4,
+article > ol + h4,
+article > blockquote + h4,
+article > dl + h4,
+article > p + h5,
+article > ul + h5,
+article > ol + h5,
+article > blockquote + h5,
+article > dl + h5 {
+    @apply mt-9;
+}
+
+article h1, .h1,
+article h2, .h2,
+article h3, .h3,
+article h4, .h4,
+article h5, .h5 {
+    @apply text-purple-700;
+}
+
+article h1, .h1 {
+    @apply text-4xl md:text-6xl font-bold mb-12;
+}
+
+article h2, .h2 {
+    @apply text-2xl md:text-4xl font-bold;
+}
+
+article h3, .h3 {
+    @apply text-xl md:text-3xl font-bold;
+}
+
+article h4, .h4 {
+    @apply text-lg md:text-2xl font-bold;
+}
+
+article h5, .h5 {
+    @apply text-base md:text-xl font-bold;
+}
+
+article > p + p,
+article > p + ul,
+article > p + ol,
+article > p + blockquote,
+article > p + dl,
+article > ul + p,
+article > ul + ul,
+article > ul + ol,
+article > ul + blockquote,
+article > ul + dl,
+article > ol + p,
+article > ol + ul,
+article > ol + ol,
+article > ol + blockquote,
+article > ol + dl,
+article > blockquote + p,
+article > blockquote + ul,
+article > blockquote + ol,
+article > blockquote + blockquote,
+article > blockquote + dl,
+article > dl + p,
+article > dl + ul,
+article > dl + ol,
+article > dl + blockquote,
+article > dl + dl {
+    @apply mb-3;
+}
+
+article > p + dl {
+    @apply mt-12;
+}
+
+article p {
+    @apply text-justify;
+}
+
+article ul li {
+    @apply ml-2;
+}
+
+article ul li:before {
+    content: "— ";
+    @apply -ml-2;
+}
+
+article ol {
+    @apply list-decimal list-inside;
+}
+
+article blockquote {
+    @apply border-l-2 border-purple-300 pl-6;
+}
+
+article dl dt {
+    @apply relative text-xl font-bold text-purple-700 pr-8;
+}
+
+article dl dt:before {
+    content: "\2193";
+    @apply absolute w-8 bottom-0 right-0 z-0 flex items-center justify-center text-purple-700;
+}
+
+article dl dd {
+    @apply mt-3 border-2 border-purple-300 rounded-md p-6;
+}
+
+/**
+ * Letter Model
+ */
+
+.char {
+    @apply w-2 h-3 inline-block bg-amber-500;
+}
+
+.varkey {
+    @apply border-b-2 border-purple-100 inline-flex items-center text-purple-800;
 }
