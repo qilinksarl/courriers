@@ -80,6 +80,6 @@ class ImportCategoriesCommand extends Command
             ],
         ]);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
