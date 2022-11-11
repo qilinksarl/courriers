@@ -71,16 +71,19 @@
             @endforeach
         </select>
     </div>
-    <div class="col-span-1 md:col-span-2 flex flex-col gap-y-2">
+    <div class="col-span-1 md:col-span-2 flex flex-col">
         <label
             for="message"
-            class="text-xs text-purple-700">Message</label>
+            class="text-xs text-purple-700 mb-2">Message</label>
         <textarea
             wire:model="message"
             id="message"
-            class="w-full border outline-none placeholder:text-purple-200 min-h-[10rem] p-3"
+            class="w-full border outline-none placeholder:text-purple-200 min-h-[10rem] p-3 @error('email') border-red-500 @else border-purple-100 @enderror"
             placeholder="votre message…"
         ></textarea>
+        @error('message')
+            <div class="text-xs text-red-500 pt-1">{{ $message }}</div>
+        @enderror
     </div>
     <div class="col-span-1 md:col-span-2 flex justify-end">
         <button class="w-full md:w-auto bg-purple-700 border-b-4 border-purple-100 text-white h-12 px-6 rounded-sm flex items-center justify-center text-lg uppercase" type="submit">Envoyer</button>

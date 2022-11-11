@@ -203,7 +203,7 @@ article h5, .h5 {
 }
 
 article h1, .h1 {
-    @apply text-4xl md:text-6xl font-bold mb-12;
+    @apply text-3xl md:text-5xl font-bold mb-12;
 }
 
 article h2, .h2 {
