@@ -12,8 +12,10 @@ use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Spatie\LaravelData\DataCollection;
 
 final class CartService implements Cart
 {
@@ -62,6 +64,14 @@ final class CartService implements Cart
         $cart = Session::get('cart');
         $cart['documents'] = DocumentData::collection($documents)->toArray();
         Session::put('cart', $cart);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDocuments(): Collection
+    {
+        return collect(Session::get('cart')['documents'])->map(fn ($document) => DocumentData::from($document));
     }
 
     /**

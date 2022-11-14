@@ -8,6 +8,7 @@ use App\DataTransferObjects\FoldData;
 use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
+use Illuminate\Support\Collection;
 
 interface Cart
 {
@@ -27,6 +28,8 @@ interface Cart
      * @return void
      */
     public function addDocuments(array $documents): void;
+
+    public function getDocuments(): Collection;
 
     /**
      * @param AddressData $addressData

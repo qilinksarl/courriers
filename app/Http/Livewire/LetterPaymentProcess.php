@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Contracts\Cart;
 use App\Traits\WithPaymentGateway;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 class LetterPaymentProcess extends Component
@@ -33,7 +35,7 @@ class LetterPaymentProcess extends Component
     /**
      * @return void
      */
-    public function updatedPromotion()
+    public function updatedPromotion(): void
     {
         $this->noPromotion = !$this->promotion;
     }
@@ -41,7 +43,7 @@ class LetterPaymentProcess extends Component
     /**
      * @return void
      */
-    public function updatedNoPromotion()
+    public function updatedNoPromotion(): void
     {
         $this->promotion = !$this->noPromotion;
     }
@@ -49,14 +51,24 @@ class LetterPaymentProcess extends Component
     /**
      * @return void
      */
-    public function saveOffer()
+    public function saveOffer(): void
     {
         if($this->promotion || $this->noPromotion) {
             $this->promotionMessage = false;
             $this->offerSelected = true;
         } else {
             $this->promotionMessage = true;
+
         }
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    public function show(string $path): void
+    {
+
     }
 
     /**
@@ -64,6 +76,10 @@ class LetterPaymentProcess extends Component
      */
     public function render(): View
     {
-        return view('livewire.letter-payment-process');
+        $cart = App::make(Cart::class);
+
+        return view('livewire.letter-payment-process', [
+            'documents' => $cart->getDocuments(),
+        ]);
     }
 }

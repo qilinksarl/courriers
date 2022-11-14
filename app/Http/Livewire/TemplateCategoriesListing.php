@@ -31,8 +31,6 @@ class TemplateCategoriesListing extends Component
      */
     public function render(): View
     {
-        ray($this->search);
-
         return view('livewire.template-categories-listing', [
             'templateCategories' => Category::orderBy('name')->get(),
             'templates' => Template::when(fn () => $this->categoryId, function ($query) {
