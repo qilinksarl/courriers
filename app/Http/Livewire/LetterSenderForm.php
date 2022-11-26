@@ -16,66 +16,72 @@ use Livewire\Redirector;
 class LetterSenderForm extends Component
 {
     /**
-     * @var array|null
+     * @var array
      */
-    public ?array $sender = null;
+    public array $senders = [];
 
     /**
-     * @var bool
+     * @var string|null
      */
-    public bool $is_professional = false;
+    public ?string $first_name = null;
+
+    /**
+     * @var string|null
+     */
+    public ?string $last_name = null;
+
+    /**
+     * @var string|null
+     */
+    public ?string $email = null;
 
     /**
      * @var array
      */
-    protected $rules = [
-        'sender.first_name' => 'required|string',
-        'sender.last_name' => 'required|string',
-        'sender.email' => 'required|email',
-        'sender.address_line_2' => 'nullable|string|max:38',
-        'sender.address_line_3' => 'nullable|string|max:38',
-        'sender.address_line_4' => 'required|string|max:38',
-        'sender.address_line_5' => 'nullable|string|max:38',
-        'sender.postal_code' => 'required|string|size:5',
-        'sender.city' => 'required|string|max:32',
-        'sender.country' => 'required|in:FRANCE',
-    ];
+    protected function rules(): array
+    {
+        $rules = [
+            'senders.*.address_line_2' => 'nullable|string|max:38',
+            'senders.*.address_line_3' => 'nullable|string|max:38',
+            'senders.*.address_line_4' => 'required|string|max:38',
+            'senders.*.address_line_5' => 'nullable|string|max:38',
+            'senders.*.postal_code' => 'required|string|size:5',
+            'senders.*.city' => 'required|string|max:32',
+            'senders.*.country' => 'required|in:FRANCE',
+            'senders.*.type' => 'required',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+        ];
+
+        foreach ($this->senders as $index => $recipient) {
+            if($recipient['type'] === AddressType::PROFESSIONAL->value) {
+                $rules['senders.'.$index.'.compagny'] = 'required|string|max:38';
+            } else {
+                $rules['senders.'.$index.'.first_name'] = 'required|string|max:19';
+                $rules['senders.'.$index.'.last_name'] = 'required|string|max:19';
+            }
+        }
+
+        return $rules;
+    }
 
     /**
      * @return void
      */
     public function mount(): void
     {
-        // TODO: gérer les adresses professionnels ou personnels
-        $sender = (App::make(Cart::class))->getSender();
-
         $customer = (App::make(Cart::class))->getCustomer();
+        $this->first_name = null; //$customer->first_name;
+        $this->last_name = null; //$customer->last_name;
+        $this->email = $customer->email;
 
-        $code_postal = null;
-        $ville = null;
+        $senders = (App::make(Cart::class))->getSenders()->toArray();
 
-        if($sender->address_line_6) {
-            // TODO: séparer le cp et la ville via un regex
-            $address_line_6 = explode(' ', $sender->address_line_6);
-
-            $code_postal = Arr::first($address_line_6);
-            Arr::forget($address_line_6, 0);
-            $ville = Arr::join($address_line_6, ' ');
+        foreach($senders as $index => $sender) {
+            $sender['type'] = $sender['type']->value;
+            $this->senders[] = $sender;
         }
-
-        $this->sender = [
-            'first_name' => $customer->first_name,
-            'last_name' => $customer->last_name,
-            'address_line_2' => $sender->address_line_2,
-            'address_line_2' => $sender->address_line_2,
-            'address_line_3' => $sender->address_line_3,
-            'address_line_4' => $sender->address_line_4,
-            'address_line_5' => $sender->address_line_5,
-            'postal_code' => $code_postal,
-            'city' => $ville,
-            'country' => $sender->address_line_7,
-            'email' => $customer->email,
-        ];
     }
 
     /**
@@ -87,21 +93,11 @@ class LetterSenderForm extends Component
 
         $cart = App::make(Cart::class);
 
-        $cart->addSender(new AddressData(
-            Str::upper(trim($this->sender['first_name']) . ' ' . trim($this->sender['last_name'])),
-            Str::upper(trim($this->sender['address_line_2'])),
-            Str::upper(trim($this->sender['address_line_3'])),
-            Str::upper(trim($this->sender['address_line_4'])),
-            Str::upper(trim($this->sender['address_line_5'])),
-            Str::upper(trim($this->sender['postal_code']) . ' ' . trim($this->sender['city'])),
-            $this->sender['country'],
-            AddressType::PROFESSIONAL
-        ));
+        $cart->addSenders($this->senders);
 
         $cart->addCustomer(new CustomerData(
-            Str::lower(trim($this->sender['first_name'])),
-            Str::lower(trim($this->sender['last_name'])),
-            Str::lower(trim($this->sender['email'])),
+            Str::lower(trim($this->name ?? $this->senders[0]->adresse_line_1)),
+            Str::lower(trim($this->last_name)),
         ));
 
         return redirect()->route('frontend.letter.payment');

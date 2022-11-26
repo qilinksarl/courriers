@@ -2,13 +2,9 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
-
 enum AppType: string
 {
-    use EnumToArray;
-
-    case TERMINATION_LETTER = 'termination-letter';
-    case REGISTERED_LETTER = 'registered-letter';
-    case POST_OFFICE = 'post-office';
+    case TERMINATION_LETTER = 'TERMINATION_LETTER';
+    case REGISTERED_LETTER = 'REGISTERED_LETTER';
+    case POST_OFFICE = 'POST_OFFICE';
 }

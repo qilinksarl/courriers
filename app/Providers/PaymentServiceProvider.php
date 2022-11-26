@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Registries\PaymentGatewayRegistry;
 use App\Services\Payments\HipayDriver;
+use App\Services\Payments\SubscriberDriver;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,6 +33,7 @@ class PaymentServiceProvider extends ServiceProvider
                 user: config('hipay.user'),
                 password: config('hipay.password'),
                 env: config('hipay.env')
-            ));
+            ))
+            ->register('subscriber', new SubscriberDriver);
     }
 }

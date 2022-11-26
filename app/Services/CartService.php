@@ -8,12 +8,12 @@ use App\DataTransferObjects\CustomerData;
 use App\DataTransferObjects\DocumentData;
 use App\DataTransferObjects\FoldData;
 use App\DataTransferObjects\OrderData;
+use App\Enums\AddressType;
 use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Spatie\LaravelData\DataCollection;
 
@@ -24,9 +24,9 @@ final class CartService implements Cart
         if(!Session::has('cart')) {
             Session::put('cart', [
                 'product' => null,
-                'documents' => DocumentData::empty(),
-                'sender' => AddressData::empty(),
-                'recipient' => AddressData::empty(),
+                'documents' => DocumentData::collection([]),
+                'senders' => AddressData::collection([AddressData::empty()]),
+                'recipients' => AddressData::collection([AddressData::empty()]),
                 'order' => OrderData::empty(),
             ]);
         }
@@ -62,16 +62,16 @@ final class CartService implements Cart
     public function addDocuments(array $documents): void
     {
         $cart = Session::get('cart');
-        $cart['documents'] = DocumentData::collection($documents)->toArray();
+        $cart['documents'] = DocumentData::collection($documents);
         Session::put('cart', $cart);
     }
 
     /**
-     * @return Collection
+     * @return DataCollection
      */
-    public function getDocuments(): Collection
+    public function getDocuments(): DataCollection
     {
-        return collect(Session::get('cart')['documents'])->map(fn ($document) => DocumentData::from($document));
+        return Session::get('cart')['documents'];
     }
 
     /**
@@ -83,41 +83,77 @@ final class CartService implements Cart
     }
 
     /**
-     * @param AddressData $addressData
+     * @param array $addresses
      * @return void
      */
-    public function addRecipient(AddressData $addressData): void
+    public function addRecipients(array $addresses): void
     {
         $cart = Session::get('cart');
-        $cart['recipient'] = $addressData->toArray();
+        $cart['recipients'] = AddressData::collection($addresses)->each(static function ($address) {
+            if($address->type === AddressType::PROFESSIONAL) {
+                $address->first_name = null;
+                $address->last_name = null;
+            } else {
+                $address->compagny = null;
+            }
+        });
         Session::put('cart', $cart);
     }
 
     /**
-     * @return AddressData
-     */
-    public function getRecipient(): AddressData
-    {
-        return AddressData::from(Session::get('cart')['recipient']);
-    }
-
-    /**
-     * @param AddressData $addressData
+     * @param int $index
      * @return void
      */
-    public function addSender(AddressData $addressData): void
+    public function removeRecipient(int $index): void
     {
         $cart = Session::get('cart');
-        $cart['sender'] = $addressData->toArray();
+        array_splice($cart['recipients'], $index, 1);
         Session::put('cart', $cart);
     }
 
     /**
-     * @return AddressData
+     * @return DataCollection
      */
-    public function getSender(): AddressData
+    public function getRecipients(): DataCollection
     {
-        return AddressData::from(Session::get('cart')['sender']);
+        return Session::get('cart')['recipients'];
+    }
+
+    /**
+     * @param array $addresses
+     * @return void
+     */
+    public function addSenders(array $addresses): void
+    {
+        $cart = Session::get('cart');
+        $cart['senders'] = AddressData::collection($addresses)->each(static function ($address) {
+            if($address->type === AddressType::PROFESSIONAL) {
+                $address->first_name = null;
+                $address->last_name = null;
+            } else {
+                $address->compagny = null;
+            }
+        });
+        Session::put('cart', $cart);
+    }
+
+    /**
+     * @param int $index
+     * @return void
+     */
+    public function removeSender(int $index): void
+    {
+        $cart = Session::get('cart');
+        array_splice($cart['senders'], $index, 1);
+        Session::put('cart', $cart);
+    }
+
+    /**
+     * @return DataCollection
+     */
+    public function getSenders(): DataCollection
+    {
+        return Session::get('cart')['senders'];
     }
 
     /**

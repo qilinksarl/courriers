@@ -2,13 +2,19 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
-
 enum PostageType: string
 {
-    use EnumToArray;
+    case SIMPLE_LETTER = 'SIMPLE_LETTER';
+    case FOLLOWED_LETTER = 'FOLLOWED_LETTER';
+    case REGISTERED_LETTER = 'REGISTERED_LETTER';
 
-    case SIMPLE_LETTER = 'simple-letter';
-    case FOLLOWED_LETTER = 'followed-letter';
-    case REGISTERED_LETTER = 'registered-letter';
+    public function label(): string
+    {
+        return match($this)
+        {
+            self::SIMPLE_LETTER => 'Lettre simple',
+            self::FOLLOWED_LETTER => 'Lettre suivie',
+            self::REGISTERED_LETTER => 'Lettre recommandée',
+        };
+    }
 }

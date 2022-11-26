@@ -20,10 +20,12 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\AccountInfo\Shipping;
 use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
 use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\MerchantRiskStatement;
 use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\PreviousAuthInfo;
+use HiPay\Fullservice\Gateway\Model\Transaction;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
 use HiPay\Fullservice\HTTP\Configuration\Configuration;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
+use Illuminate\Support\Facades\Log;
 
 class HipayDriver implements PaymentGateway
 {
@@ -71,58 +73,34 @@ class HipayDriver implements PaymentGateway
 
     /**
      * @param array $payload
-     * @return TransactionRedirectData
+     * @return TransactionRedirectData|bool
      */
-    public function capture(array $payload): TransactionRedirectData
+    public function capture(array $payload): TransactionRedirectData|bool
     {
         $transaction = $this->gatewayClient->requestNewOrder(
             $this->orderRequest($payload)
         );
 
-        $forwardUrl = $transaction->getForwardUrl();
+        $this->transactionLogging($transaction);
 
-        switch($transaction->getState()) {
-            case TransactionState::COMPLETED:
-            case TransactionState::PENDING:
-                $redirect = new TransactionRedirectData(
-                    status: 200,
-                    url: route('')
-                );
-                break;
-            case TransactionState::FORWARDING:
-                $redirect = new TransactionRedirectData(
-                    status: 200,
-                    url: $forwardUrl
-                );
-                break;
-            case TransactionState::DECLINED:
-            case TransactionState::ERROR:
-                $reason = $transaction->getReason();
-
-                $redirect = new TransactionRedirectData(
-                    status: 500,
-                    url: route(''),
-                    message: 'An error occured, process has been cancelled.'
-                );
-                break;
-            default:
-                $redirect = new TransactionRedirectData(
-                    status: 500,
-                    url: route(''),
-                    message: 'An error occured, process has been cancelled.'
-                );
-        }
-
-        return $redirect;
+        return $this->transactionRedirect($transaction);
     }
 
     /**
      * @param bool $isSubscription
      * @return void
      */
-    public function isSubscription(bool $isSubscription = false): void
+    public function setSubscription(bool $isSubscription = false): void
     {
         $this->eci = $isSubscription ? self::RECURRING_TRANSACTION : self::TRANSACTION;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSubscription(): bool
+    {
+        return $this->eci === self::RECURRING_TRANSACTION;
     }
 
     /**
@@ -280,5 +258,65 @@ class HipayDriver implements PaymentGateway
         $merchantRiskStatement->shipping_indicator = ShippingIndicator::DIGITAL_GOODS;
 
         return $merchantRiskStatement;
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return transactionRedirectData
+     */
+    private function transactionRedirect(Transaction $transaction): transactionRedirectData
+    {
+        $forwardUrl = $transaction->getForwardUrl();
+
+        switch($transaction->getState()) {
+            case TransactionState::COMPLETED:
+            case TransactionState::PENDING:
+                $redirect = new TransactionRedirectData(
+                    status: 200,
+                    url: route('')
+                );
+                break;
+            case TransactionState::FORWARDING:
+                $redirect = new TransactionRedirectData(
+                    status: 200,
+                    url: $forwardUrl
+                );
+                break;
+            case TransactionState::DECLINED:
+            case TransactionState::ERROR:
+                $reason = $transaction->getReason();
+
+                $redirect = new TransactionRedirectData(
+                    status: 500,
+                    url: route(''),
+                    message: 'An error occured, process has been cancelled.'
+                );
+                break;
+            default:
+                $redirect = new TransactionRedirectData(
+                    status: 500,
+                    url: route(''),
+                    message: 'An error occured, process has been cancelled.'
+                );
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return void
+     */
+    private function transactionLogging(Transaction $transaction): void
+    {
+        /*switch($transaction->getState()) {
+            case TransactionState::COMPLETED:
+            case TransactionState::PENDING:
+                break;
+            case TransactionState::FORWARDING:
+                break;
+            case TransactionState::DECLINED:
+            case TransactionState::ERROR:
+                break;
+            default:
+        }*/
     }
 }

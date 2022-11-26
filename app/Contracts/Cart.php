@@ -9,6 +9,7 @@ use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
 use Illuminate\Support\Collection;
+use Spatie\LaravelData\DataCollection;
 
 interface Cart
 {
@@ -29,29 +30,44 @@ interface Cart
      */
     public function addDocuments(array $documents): void;
 
-    public function getDocuments(): Collection;
+    /**
+     * @return DataCollection
+     */
+    public function getDocuments(): DataCollection;
 
     /**
-     * @param AddressData $addressData
+     * @param array $addresses
      * @return void
      */
-    public function addRecipient(AddressData $addressData): void;
+    public function addRecipients(array $addresses): void;
 
     /**
-     * @return AddressData
-     */
-    public function getRecipient(): AddressData;
-
-    /**
-     * @param AddressData $addressData
+     * @param int $index
      * @return void
      */
-    public function addSender(AddressData $addressData): void;
+    public function removeRecipient(int $index): void;
 
     /**
-     * @return AddressData
+     * @return DataCollection
      */
-    public function getSender(): AddressData;
+    public function getRecipients(): DataCollection;
+
+    /**
+     * @param array $addresses
+     * @return void
+     */
+    public function addSenders(array $addresses): void;
+
+    /**
+     * @param int $index
+     * @return void
+     */
+    public function removeSender(int $index): void;
+
+    /**
+     * @return DataCollection
+     */
+    public function getSenders(): DataCollection;
 
     /**
      * @param CustomerData $customerData

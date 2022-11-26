@@ -13,68 +13,73 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Redirector;
+use Spatie\LaravelData\DataCollection;
 
 class LetterRecipientForm extends Component
 {
     /**
-     * @var array|null
-     */
-    public ?array $recipient = null;
-
-    /**
-     * @var bool
-     */
-    public bool $is_professional = false;
-
-    /**
      * @var array
      */
-    protected $rules = [
-        'recipient.address_line_1' => 'required|string|max:38',
-        'recipient.address_line_2' => 'nullable|string|max:38',
-        'recipient.address_line_3' => 'nullable|string|max:38',
-        'recipient.address_line_4' => 'required|string|max:38',
-        'recipient.address_line_5' => 'nullable|string|max:38',
-        'recipient.postal_code' => 'required|string|size:5',
-        'recipient.city' => 'required|string|max:32',
-        'recipient.country' => 'required|in:FRANCE',
-    ];
+    public array $recipients = [];
+
+    /**
+     * @return array
+     */
+    protected function rules(): array
+    {
+        $rules = [
+            'recipients.*.address_line_2' => 'nullable|string|max:38',
+            'recipients.*.address_line_3' => 'nullable|string|max:38',
+            'recipients.*.address_line_4' => 'required|string|max:38',
+            'recipients.*.address_line_5' => 'nullable|string|max:38',
+            'recipients.*.postal_code' => 'required|string|size:5',
+            'recipients.*.city' => 'required|string|max:32',
+            'recipients.*.country' => 'required|in:FRANCE',
+            'recipients.*.type' => 'required',
+        ];
+
+        foreach ($this->recipients as $index => $recipient) {
+            if($recipient['type'] === AddressType::PROFESSIONAL->value) {
+                $rules['recipients.'.$index.'.compagny'] = 'required|string|max:38';
+            } else {
+                $rules['recipients.'.$index.'.first_name'] = 'required|string|max:19';
+                $rules['recipients.'.$index.'.last_name'] = 'required|string|max:19';
+            }
+        }
+
+        return $rules;
+    }
 
     /**
      * @return void
      */
     public function mount(): void
     {
-        // TODO: gérer les adresses professionnels ou personnels
-        $recipient = (App::make(Cart::class))->getRecipient();
+        $recipients = (App::make(Cart::class))->getRecipients()->toArray();
 
-        $code_postal = null;
-        $ville = null;
-
-        if($recipient->address_line_6) {
-            // TODO: séparer le cp et la ville via un regex
-            $address_line_6 = explode(' ', $recipient->address_line_6);
-
-            $code_postal = Arr::first($address_line_6);
-            Arr::forget($address_line_6, 0);
-            $ville = Arr::join($address_line_6, ' ');
+        foreach($recipients as $index => $recipient) {
+            $recipient['type'] = $recipient['type']->value;
+            $this->recipients[] = $recipient;
         }
+    }
 
-        if($recipient->type === AddressType::PROFESSIONAL) {
-            $this->is_professional = true;
-        }
+    /**
+     * @return void
+     */
+    public function add(): void
+    {
+        $recipient = AddressData::empty();
+        $recipient['type'] = $recipient['type']->value;
+        $this->recipients[] = $recipient;
+    }
 
-        $this->recipient = [
-            'address_line_1' => $recipient->address_line_1,
-            'address_line_2' => $recipient->address_line_2,
-            'address_line_3' => $recipient->address_line_3,
-            'address_line_4' => $recipient->address_line_4,
-            'address_line_5' => $recipient->address_line_5,
-            'postal_code' => $code_postal,
-            'city' => $ville,
-            'country' => $recipient->address_line_7,
-        ];
-
+    /**
+     * @param int $index
+     * @return void
+     */
+    public function remove(int $index): void
+    {
+        array_splice($this->recipients, $index, 1);
     }
 
     /**
@@ -84,18 +89,10 @@ class LetterRecipientForm extends Component
     {
         $this->validate();
 
+
         $cart = (App::make(Cart::class));
 
-        $cart->addRecipient(new AddressData(
-            address_line_1: Str::upper(trim($this->recipient['address_line_1'])),
-            address_line_2: Str::upper(trim($this->recipient['address_line_2'])),
-            address_line_3: Str::upper(trim($this->recipient['address_line_3'])),
-            address_line_4: Str::upper(trim($this->recipient['address_line_4'])),
-            address_line_5: Str::upper(trim($this->recipient['address_line_5'])),
-            address_line_6: Str::upper(trim($this->recipient['postal_code']) . ' ' . trim($this->recipient['city'])),
-            address_line_7: $this->recipient['country'],
-            type: $this->is_professional ? AddressType::PERSONAL : AddressType::PROFESSIONAL
-        ));
+        $cart->addRecipients($this->recipients);
 
         if($cart->getPostageType() === PostageType::REGISTERED_LETTER) {
             return redirect()->route('frontend.letter.sender');

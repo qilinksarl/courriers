@@ -18,7 +18,7 @@
         }
 
         $breadcrumb[] = (object)[
-            'name' => 'Destinaire',
+            'name' => 'Destinaires',
             'active' => request()->segment(2) === 'destinataire',
         ];
 

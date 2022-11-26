@@ -15,13 +15,13 @@ interface PaymentGateway
 
     /**
      * @param array $payload
-     * @return TransactionRedirectData
+     * @return TransactionRedirectData|bool
      */
-    public function capture(array $payload): TransactionRedirectData;
+    public function capture(array $payload): TransactionRedirectData|bool;
 
     /**
      * @param bool $isSubscription
      * @return void
      */
-    public function isSubscription(bool $isSubscription): void;
+    public function setSubscription(bool $isSubscription): void;
 }

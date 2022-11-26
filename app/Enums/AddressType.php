@@ -2,12 +2,17 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
-
 enum AddressType: string
 {
-    use EnumToArray;
+    case PROFESSIONAL = 'PROFESSIONAL';
+    case PERSONAL = 'PERSONAL';
 
-    case PROFESSIONAL = 'Professionnel';
-    case PERSONAL = 'Personnel';
+    public function label(): string
+    {
+        return match($this)
+        {
+            self::PROFESSIONAL => 'Adresse professionnelle',
+            self::PERSONAL => 'Adresse personnelle',
+        };
+    }
 }

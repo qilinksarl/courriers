@@ -2,13 +2,19 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
-
 enum PageStatus: string
 {
-    use EnumToArray;
+    case DRAFT = 'DRAFT';
+    case HIDDEN = 'HIDDEN';
+    case VISIBLE = 'VISIBLE';
 
-    case DRAFT = 'Brouillon';
-    case HIDDEN = 'Inaccessible';
-    case VISIBLE = 'Accessible';
+    public function label(): string
+    {
+        return match($this)
+        {
+            self::DRAFT => 'Brouillon',
+            self::HIDDEN => 'Inaccessible',
+            self::VISIBLE => 'Accessible',
+        };
+    }
 }
