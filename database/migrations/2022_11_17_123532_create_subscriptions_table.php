@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedInteger('attempts')
                 ->default(0);
             $table->string('status')
-                ->default(SubscriptionStatus::TRIAL);
+                ->default(SubscriptionStatus::TRIAL->value);
             $table->jsonb('meta_data');
             $table->foreignIdFor(User::class)
                 ->nullable()
