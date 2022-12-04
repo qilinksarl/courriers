@@ -61,7 +61,7 @@
                 class="w-full border-b outline-none h-8 placeholder:text-purple-200 @error($person . '.' . $index . '.address_line_2') border-red-500 @else border-purple-100 @enderror"
             />
         </label>
-        @error($person . '.' . $index . '.address_line_3')
+        @error($person . '.' . $index . '.address_line_2')
             <div class="text-xs text-red-500 pt-1">{{ $message }}</div>
         @enderror
         <label
@@ -76,7 +76,7 @@
                 class="w-full border-b outline-none h-8 placeholder:text-purple-200 @error($person . '.' . $index . '.address_line_3') border-red-500 @else border-purple-100 @enderror"
             />
         </label>
-        @error($person . '.' . $index . '.address_line_4')
+        @error($person . '.' . $index . '.address_line_3')
             <div class="text-xs text-red-500 pt-1">{{ $message }}</div>
         @enderror
         <label

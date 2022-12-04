@@ -2,15 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Contracts\Cart;
-use App\DataTransferObjects\AddressData;
-use App\DataTransferObjects\CustomerData;
-use App\Enums\AddressType;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Redirector;
 
 class ContactForm extends Component
 {

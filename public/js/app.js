@@ -11032,7 +11032,8 @@ __webpack_require__.r(__webpack_exports__);
       });
       dom.appendChild(innerText);
       return {
-        dom: dom
+        dom: dom,
+        contentDOM: innerText
       };
     };
   }

@@ -20,4 +20,23 @@ class ModelData extends Data
         public bool $is_new_type = false,
     ){
     }
+
+    /**
+     * @param array $template
+     * @return self
+     */
+    public static function fromTemplate(array $template): self
+    {
+        if(is_array($template['model']) && array_key_exists('json', $template['model'])) {
+            return new self(
+                model: $template['model']['json'],
+                is_new_type: true,
+            );
+        }
+
+        return new self(
+            model: $template['model'],
+            group_fields: $template['group_fields'],
+        );
+    }
 }

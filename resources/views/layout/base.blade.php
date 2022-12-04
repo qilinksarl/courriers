@@ -8,6 +8,7 @@
         @stack('styles')
     </head>
     <body class="antialiased bg-amber-500">
+        @yield('body')
         <header class="bg-gray-50 border-b-2 border-gray-100">
             @include('front-end._partials.navigation')
         </header>

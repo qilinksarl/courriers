@@ -14,6 +14,7 @@ class CustomerData extends Data
      * @param string|null $first_name
      * @param string|null $last_name
      * @param string|null $email
+     * @param string|null $phone
      */
     public function __construct(
         #[Required,Nullable]
@@ -22,6 +23,8 @@ class CustomerData extends Data
         public ?string $last_name,
         #[Required,Email,Nullable]
         public ?string $email,
+        #[Nullable]
+        public ?string $phone = null,
     ){
     }
 }

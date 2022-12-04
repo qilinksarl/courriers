@@ -2,14 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Contracts\Cart;
-use App\DataTransferObjects\DocumentData;
-use App\DataTransferObjects\FoldData;
-use App\Enums\DocumentType;
-use App\Traits\Documentable;
+use App\Actions\Letter\AddDocumentsAction;
+use App\Helpers\MimeTypes;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 use Livewire\Redirector;
 use Livewire\WithFileUploads;
@@ -17,27 +12,32 @@ use Livewire\WithFileUploads;
 class LetterImportForm extends Component
 {
     use WithFileUploads;
-    use Documentable;
 
     /**
      * @var mixed
      */
     public mixed $files = [];
 
-    // TODO: Vérifier aussi la taille max du fichier
-    protected $rules = [
-        'files' => 'required',
-        'files.*' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,text/plain',
-    ];
+    /**
+     * @return string[]
+     */
+    protected function rules(): array
+    {
+        return [
+            'files' => 'required',
+            'files.*' => 'required|file|mimetypes:' . MimeTypes::authorized(),
+        ];
+    }
 
     /**
      * @return RedirectResponse|Redirector
+     * @throws \Exception
      */
     public function save(): RedirectResponse|Redirector
     {
         $this->validate();
+        (new AddDocumentsAction())->handle($this->files);
 
-        (App::make(Cart::class))->addDocuments($this->makeDocuments($this->files));
         return redirect()->route('frontend.letter.postage');
     }
 

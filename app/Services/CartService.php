@@ -13,9 +13,10 @@ use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 final class CartService implements Cart
 {
@@ -37,22 +38,22 @@ final class CartService implements Cart
     }
 
     /**
-     * @param Brand|Template|null $product
+     * @param OrderData $order
      * @return void
      */
-    public function addProduct(Brand|Template|null $product): void
+    public function addOrder(OrderData $order): void
     {
         $cart = Session::get('cart');
-        $cart['product'] = $product?->toArray();
+        $cart['order'] = $order->toArray();
         Session::put('cart', $cart);
     }
 
     /**
-     * @return Brand|Template|null
+     * @return OrderData
      */
-    public function getProduct(): Brand|Template|null
+    public function getOrder(): OrderData
     {
-        return Session::get('cart.product');
+        return OrderData::from(Session::get('cart.order'));
     }
 
     /**
@@ -89,14 +90,7 @@ final class CartService implements Cart
     public function addRecipients(array $addresses): void
     {
         $cart = Session::get('cart');
-        $cart['recipients'] = AddressData::collection($addresses)->each(static function ($address) {
-            if($address->type === AddressType::PROFESSIONAL) {
-                $address->first_name = null;
-                $address->last_name = null;
-            } else {
-                $address->compagny = null;
-            }
-        });
+        $cart['recipients'] = $this->getAddressDataCollection($addresses);
         Session::put('cart', $cart);
     }
 
@@ -126,14 +120,7 @@ final class CartService implements Cart
     public function addSenders(array $addresses): void
     {
         $cart = Session::get('cart');
-        $cart['senders'] = AddressData::collection($addresses)->each(static function ($address) {
-            if($address->type === AddressType::PROFESSIONAL) {
-                $address->first_name = null;
-                $address->last_name = null;
-            } else {
-                $address->compagny = null;
-            }
-        });
+        $cart['senders'] = $this->getAddressDataCollection($addresses);
         Session::put('cart', $cart);
     }
 
@@ -187,5 +174,26 @@ final class CartService implements Cart
     public function getPostageType(): PostageType|null
     {
         return Session::get('cart.order.postage');
+    }
+
+    /**
+     * @param array $addresses
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    private function getAddressDataCollection(array $addresses): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    {
+        return AddressData::collection($addresses)->each(static function($address) {
+            if ($address->type === AddressType::PROFESSIONAL) {
+                $address->first_name = null;
+                $address->last_name = null;
+            } else {
+                $address->compagny = null;
+            }
+
+            $country = explode('_', $address->country);
+
+            $address->country = $country[0];
+            $address->country_code = $country[1];
+        });
     }
 }

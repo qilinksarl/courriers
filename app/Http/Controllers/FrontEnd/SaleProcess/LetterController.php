@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\FrontEnd\SaleProcess;
 
+use App\Contracts\Cart;
 use App\DataTransferObjects\ModelData;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Template;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class LetterController extends Controller
 {

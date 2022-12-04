@@ -33,6 +33,7 @@ class AddressData extends Data
         public ?string $postal_code,
         public ?string $city,
         public ?string $country,
+        public ?string $country_code,
         #[WithCast(AddressTypeCast::class)]
         public AddressType $type = AddressType::PROFESSIONAL,
     ){

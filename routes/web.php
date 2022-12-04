@@ -6,8 +6,10 @@ use App\Http\Controllers\FrontEnd\SaleProcess\LetterController;
 use App\Http\Controllers\FrontEnd\SaleProcess\LetterDocumentController;
 use App\Http\Controllers\FrontEnd\SaleProcess\PaymentController;
 use App\Http\Controllers\FrontEnd\SaleProcess\PostageController;
+use App\Http\Controllers\FrontEnd\SaleProcess\PreviewController;
 use App\Http\Controllers\FrontEnd\SaleProcess\RecipientController;
 use App\Http\Controllers\FrontEnd\SaleProcess\SenderController;
+use App\Http\Controllers\FrontEnd\SaleProcess\ValidationController;
 use App\Http\Controllers\FrontEnd\StaticPageController;
 use App\Http\Controllers\FrontEnd\TemplatePageController;
 use Illuminate\Support\Facades\Route;
@@ -90,10 +92,22 @@ Route::get(
     ->name('frontend.letter.sender');
 
 Route::get(
+    '/lettre/validation',
+    ValidationController::class,
+)
+    ->name('frontend.letter.validation');
+
+Route::get(
     '/lettre/paiement',
     PaymentController::class,
 )
     ->name('frontend.letter.payment');
+
+Route::get(
+    '/lettre/preview/{id}',
+    PreviewController::class,
+)
+    ->name('frontend.letter.preview');
 
 /**
  * Pages

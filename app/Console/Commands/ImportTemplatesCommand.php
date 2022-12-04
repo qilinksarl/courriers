@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\DataTransferObjects\AddressData;
 use App\DataTransferObjects\ModelData;
 use App\DataTransferObjects\TemplateData;
 use App\Models\Category;
 use App\Models\Template;
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Symfony\Component\Yaml\Yaml;

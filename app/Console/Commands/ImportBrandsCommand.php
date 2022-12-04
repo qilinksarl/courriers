@@ -136,13 +136,16 @@ class ImportBrandsCommand extends Command
                 $brand = Brand::create(array_merge((new BrandData(
                     name: $object->matter('title'),
                     address: new AddressData(
-                        address_line_1: $object->matter('destinataire'),
+                        compagny: $object->matter('destinataire'),
+                        first_name: null,
+                        last_name: null,
                         address_line_2: null,
                         address_line_3: null,
                         address_line_4: $object->matter('adresse'),
                         address_line_5: null,
-                        address_line_6: $object->matter('code_postal') . ' ' . Str::of($object->matter('commune'))->trim()->upper(),
-                        address_line_7: 'France'
+                        postal_code: $object->matter('code_postal'),
+                        city: Str::of($object->matter('commune'))->trim()->upper(),
+                        country: 'France'
                     ),
                     status: PageStatus::VISIBLE,
                 ))->toArray(), [

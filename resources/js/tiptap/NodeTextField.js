@@ -53,6 +53,7 @@ export default Node.create({
 
             return {
                 dom,
+                contentDOM: innerText,
             }
         }
     },

@@ -7,7 +7,8 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-
+        \App\Settings\MailevaSettings::class,
+        \App\Settings\PricingSettings::class,
     ],
 
     /*

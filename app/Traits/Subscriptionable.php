@@ -1,17 +1,9 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Traits;
 
-use App\Contracts\Cart;
-use App\Traits\WithPaymentGateway;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\App;
-use Livewire\Component;
-
-class LetterPaymentProcess extends Component
+trait Subscriptionable
 {
-    use WithPaymentGateway;
-
     /**
      * @var bool
      */
@@ -58,28 +50,6 @@ class LetterPaymentProcess extends Component
             $this->offerSelected = true;
         } else {
             $this->promotionMessage = true;
-
         }
-    }
-
-    /**
-     * @param string $path
-     * @return void
-     */
-    public function show(string $path): void
-    {
-
-    }
-
-    /**
-     * @return View
-     */
-    public function render(): View
-    {
-        $cart = App::make(Cart::class);
-
-        return view('livewire.letter-payment-process', [
-            'documents' => $cart->getDocuments(),
-        ]);
     }
 }

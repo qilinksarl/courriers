@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Category;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class ImportCategoriesCommand extends Command
 {

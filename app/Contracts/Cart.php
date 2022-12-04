@@ -2,27 +2,26 @@
 
 namespace App\Contracts;
 
-use App\DataTransferObjects\AddressData;
 use App\DataTransferObjects\CustomerData;
 use App\DataTransferObjects\FoldData;
+use App\DataTransferObjects\OrderData;
 use App\Enums\PostageType;
 use App\Models\Brand;
 use App\Models\Template;
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\DataCollection;
 
 interface Cart
 {
     /**
-     * @param Brand|Template|null $product
+     * @param OrderData $order
      * @return void
      */
-    public function addProduct(Brand|Template|null $product): void;
+    public function addOrder(OrderData $order): void;
 
     /**
-     * @return Brand|Template|null
+     * @return OrderData
      */
-    public function getProduct(): Brand|Template|null;
+    public function getOrder(): OrderData;
 
     /**
      * @param array $documents

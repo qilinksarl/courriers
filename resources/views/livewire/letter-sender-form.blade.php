@@ -49,11 +49,12 @@
                             class="appearance-none w-full border-b outline-none h-8 placeholder:text-purple-200 bg-transparent rounded-none @error('senders.' . $index . '.country') border-red-500 @else border-purple-100 @enderror"
                         >
                             <option value="null">Selectionnez le pays</option>
+                            @foreach($default_countries as $country)
+                                <option value="{{ Str::upper($country['name'].'_'.$country['code']) }}">{{ Str::upper($country['name']) }}</option>
+                            @endforeach
+                            <option disabled>───</option>
                             @foreach($countries as $country)
-                                <option value="{{ Str::upper($country) }}">{{ Str::upper($country) }}</option>
-                                @if($loop->first)
-                                    <option disabled>───</option>
-                                @endif
+                                <option value="{{ Str::upper($country['name'].'_'.$country['code']) }}">{{ Str::upper($country['name']) }}</option>
                             @endforeach
                         </select>
                     </div>

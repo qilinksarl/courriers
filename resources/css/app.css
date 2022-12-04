@@ -299,3 +299,32 @@ article dl dd {
 .varkey {
     @apply border-b-2 border-purple-100 inline-flex items-center text-purple-800;
 }
+
+/**
+ * Toggle checkbox
+ */
+
+.toggle-checkbox {
+    @apply relative bg-gray-200 rounded-full appearance-none w-12 h-6 cursor-pointer;
+}
+
+.toggle-checkbox-amber {
+    @apply bg-amber-200;
+}
+
+.toggle-checkbox::before {
+    content: "";
+    @apply absolute left-0 block bg-white border border-gray-200 rounded-full w-6 h-6;
+}
+
+.toggle-checkbox-amber::before {
+    @apply border-amber-200;
+}
+
+.toggle-checkbox:checked, .toggle-checkbox-amber:checked {
+    @apply bg-purple-700;
+}
+
+.toggle-checkbox:checked::before {
+    @apply left-auto right-0;
+}
